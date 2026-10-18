@@ -16,6 +16,7 @@ import { DonationModal } from './components/DonationModal';
 import { AdminRecordsModal } from './components/AdminRecordsModal';
 import { AudioChantPlayer } from './components/AudioChantPlayer';
 import { VideoModal } from './components/VideoModal';
+import { ScrollToTop } from './components/ScrollToTop';
 import { INITIAL_RECORDS } from './data/trustData';
 
 export function App() {
@@ -123,6 +124,9 @@ export function App() {
         isOpen={isVideoModalOpen}
         onClose={() => setIsVideoModalOpen(false)}
       />
+
+      {/* Floating Scroll to Top Button */}
+      <ScrollToTop />
 
       {/* Meditative Ambient Chime Player & Floating Support Dock */}
       <AudioChantPlayer />

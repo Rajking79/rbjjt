@@ -2128,3 +2128,62 @@ img {
   }
 }
 
+/* =========================================================
+   Scroll To Top Floating Button
+   ========================================================= */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  z-index: 989;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #7A1414, #D97706);
+  color: #FFF;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 30px;
+  padding: 0.55rem 0.95rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: all var(--transition-normal);
+}
+
+.scroll-to-top-btn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(217, 119, 6, 0.4);
+  background: linear-gradient(135deg, #D97706, #7A1414);
+}
+
+/* =========================================================
+   Hero Visual Container & Clean Meta Card Under Buddha Image
+   ========================================================= */
+.hero-visual-container {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.hero-visual-meta-card {
+  margin-top: 0.75rem;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-normal);
+}
+
+.hero-visual-meta-card:hover {
+  border-color: var(--color-gold);
+}
+
+.video-showcase-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+

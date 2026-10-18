@@ -104,38 +104,47 @@ export function Hero({ onOpenDonateModal, onOpenVideoModal }) {
           <div className="hero-visual-card">
             <div className="hero-image-aura"></div>
             
-            <div className="hero-image-wrapper">
-              <img 
-                src="https://rbjjt.com/wp-content/uploads/2026/01/1652464530_cdb65g4upihlrgv02knq6jy3taho_14_80_feet_buddha_statue_bodhgaya.webp" 
-                alt="Lord Buddha Bodhgaya Statue"
-                className="hero-main-img"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://rbjjt.com/wp-content/uploads/2026/01/1619887156_mulagandha_kuti_vihar.jpg.webp";
-                }}
-              />
-              
-              <div className="hero-img-gradient-overlay">
-                <span className="hero-img-location">
-                  📍 ऋषिपत्तन, सारनाथ (वाराणसी)
-                </span>
-                <h3 className="hero-img-caption">
-                  धर्मचक्र प्रवर्तन की पावन तीर्थ भूमि
-                </h3>
+            <div className="hero-visual-container">
+              {/* Top Float Badge */}
+              <div className="hero-badge-pill animate-float">
+                <span className="wheel-spin">☸</span>
+                <span>शील • समाधि • प्रज्ञा</span>
               </div>
-            </div>
 
-            {/* Floating Badges */}
-            <div className="hero-badge-floating animate-float">
-              <ShieldCheck size={18} color="var(--color-gold)" />
-              <div>
-                <span>पंजीकृत ट्रस्ट: {TRUST_INFO.regNo}</span>
+              {/* Main Statue Frame */}
+              <div className="hero-image-wrapper">
+                <img 
+                  src="https://rbjjt.com/wp-content/uploads/2026/01/1652464530_cdb65g4upihlrgv02knq6jy3taho_14_80_feet_buddha_statue_bodhgaya.webp" 
+                  alt="Lord Buddha Bodhgaya Statue"
+                  className="hero-main-img"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://rbjjt.com/wp-content/uploads/2026/01/1619887156_mulagandha_kuti_vihar.jpg.webp";
+                  }}
+                />
               </div>
-            </div>
 
-            <div className="hero-badge-pill animate-float-delayed">
-              <span className="wheel-spin">☸</span>
-              <span>शील • समाधि • प्रज्ञा</span>
+              {/* Clean Integrated Meta Card Under Image */}
+              <div className="hero-visual-meta-card">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.45rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <span style={{ fontSize: '1rem' }}>📍</span>
+                    <div>
+                      <strong style={{ color: 'var(--color-primary)', fontSize: '0.88rem', display: 'block' }}>ऋषिपत्तन, सारनाथ (वाराणसी)</strong>
+                      <span style={{ color: 'var(--color-text-muted)', fontSize: '0.78rem' }}>धर्मचक्र प्रवर्तन की पावन तीर्थ भूमि</span>
+                    </div>
+                  </div>
+                  <div className="meta-reg-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', background: 'rgba(217, 119, 6, 0.12)', border: '1px solid rgba(217, 119, 6, 0.35)', color: 'var(--color-gold-dark)', borderRadius: '20px', padding: '3px 10px', fontSize: '0.76rem', fontWeight: 700 }}>
+                    <ShieldCheck size={14} color="var(--color-gold)" />
+                    <span>{TRUST_INFO.regNo}</span>
+                  </div>
+                </div>
+
+                <div style={{ background: 'var(--color-bg)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--color-gold)', fontSize: '0.82rem', color: 'var(--color-text-main)', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Sparkles size={14} color="var(--color-gold)" style={{ flexShrink: 0 }} />
+                  <span>“इस मन से बड़ा कोई मित्र नहीं... इसे सही दिशा देना ही सच्चा कल्याण है।”</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

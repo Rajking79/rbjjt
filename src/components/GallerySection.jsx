@@ -1,96 +1,273 @@
 import React, { useState } from 'react';
-import { Sparkles, X, ZoomIn, Eye } from 'lucide-react';
-import { GALLERY_ITEMS } from '../data/trustData';
+import { 
+  Sparkles, X, Play, Video, Image as ImageIcon, BookOpen, 
+  Quote, Volume2, ArrowRight, CheckCircle2 
+} from 'lucide-react';
+import { GALLERY_ITEMS, DHAMMA_VIDEOS, DHAMMA_DISCOURSES } from '../data/trustData';
 
 export function GallerySection() {
-  const [activeCategory, setActiveCategory] = useState('सभी (All)');
+  const [activeMainTab, setActiveMainTab] = useState('photos'); // 'photos' | 'videos' | 'discourses'
+  const [photoCategory, setPhotoCategory] = useState('सभी (All)');
   const [lightboxItem, setLightboxItem] = useState(null);
+  const [activeVideoModal, setActiveVideoModal] = useState(null);
 
-  const categories = ['सभी (All)', 'संस्कार', 'दीक्षा', 'विहार', 'शिक्षा', 'स्वास्थ्य', 'सुरक्षा'];
+  const photoCategories = ['सभी (All)', 'संस्कार', 'दीक्षा', 'विहार', 'शिक्षा', 'स्वास्थ्य', 'सुरक्षा'];
 
-  const filteredItems = activeCategory === 'सभी (All)' 
+  const filteredPhotos = photoCategory === 'सभी (All)' 
     ? GALLERY_ITEMS 
-    : GALLERY_ITEMS.filter(item => item.category === activeCategory);
+    : GALLERY_ITEMS.filter(item => item.category === photoCategory);
 
   return (
     <section id="gallery" className="section">
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div className="badge-tag">
+          <div className="badge-tag animate-bounce-subtle">
             <Sparkles size={14} />
-            <span>चित्र दीर्घा एवं सेवा गतिविधियाँ</span>
+            <span>चित्र, पावन वीडियो एवं धम्मदेशना</span>
           </div>
-          <h2 className="section-title">ट्रस्ट गतिविधि गैलरी (Gallery)</h2>
+          <h2 className="section-title">ट्रस्ट गतिविधि गैलरी व धम्मदेशना</h2>
           <div className="title-ornament">
             <span className="dharma-wheel">☸</span>
           </div>
           <p className="section-subtitle">
-            विभिन्न क्षेत्रों में आयोजित दीक्षा समारोह, संस्कार विवाह, विपश्यना ध्यान साधना और शिक्षा प्रकल्पों की प्रेरक झलकियाँ
+            विभिन्न क्षेत्रों में आयोजित दीक्षा समारोह, संस्कार विवाह, सारनाथ तीर्थ, बुद्ध रश्मि धम्मदेशना और विपश्यना ध्यान की पावन प्रेरणा
           </p>
         </div>
 
-        {/* Gallery Filter Buttons */}
-        <div className="gallery-filters">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* 3 Main Navigation Tabs */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '0.75rem',
+          flexWrap: 'wrap',
+          marginBottom: '2rem'
+        }}>
+          <button
+            onClick={() => setActiveMainTab('photos')}
+            className={`btn ${activeMainTab === 'photos' ? 'btn-gold' : 'btn-outline'}`}
+            style={{ borderRadius: '30px', padding: '0.65rem 1.4rem' }}
+          >
+            <ImageIcon size={18} />
+            <span>📸 फोटो गैलरी (Photos)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveMainTab('videos')}
+            className={`btn ${activeMainTab === 'videos' ? 'btn-gold' : 'btn-outline'}`}
+            style={{ borderRadius: '30px', padding: '0.65rem 1.4rem' }}
+          >
+            <Video size={18} />
+            <span>🎥 पावन वीडियो गैलरी (Videos)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveMainTab('discourses')}
+            className={`btn ${activeMainTab === 'discourses' ? 'btn-gold' : 'btn-outline'}`}
+            style={{ borderRadius: '30px', padding: '0.65rem 1.4rem' }}
+          >
+            <BookOpen size={18} />
+            <span>📜 धम्मदेशना व अमृतपद (Discourses)</span>
+          </button>
         </div>
 
-        {/* Gallery Grid */}
-        <div className="gallery-grid">
-          {filteredItems.map((item) => (
-            <div 
-              key={item.id} 
-              className="gallery-card"
-              onClick={() => setLightboxItem(item)}
-            >
-              <img 
-                src={item.image} 
-                alt={item.title} 
-                loading="lazy"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://rbjjt.com/wp-content/uploads/2026/01/1619887156_mulagandha_kuti_vihar.jpg.webp";
-                }}
-              />
-              <div className="gallery-overlay">
-                <span style={{ 
-                  display: 'inline-block',
-                  background: 'rgba(217, 119, 6, 0.85)', 
-                  color: '#FFF', 
-                  fontSize: '0.72rem', 
-                  padding: '2px 8px', 
-                  borderRadius: '12px',
-                  width: 'fit-content',
-                  marginBottom: '0.3rem',
-                  fontWeight: 700
-                }}>
-                  {item.category}
-                </span>
-                <h5>{item.title}</h5>
-                <p>{item.desc}</p>
-              </div>
+        {/* TAB 1: Photo Gallery */}
+        {activeMainTab === 'photos' && (
+          <div className="animate-fade-in">
+            {/* Gallery Category Filter Buttons */}
+            <div className="gallery-filters" style={{ marginBottom: '1.75rem' }}>
+              {photoCategories.map((cat) => (
+                <button
+                  key={cat}
+                  className={`filter-btn ${photoCategory === cat ? 'active' : ''}`}
+                  onClick={() => setPhotoCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
+
+            {/* Photo Grid */}
+            <div className="gallery-grid">
+              {filteredPhotos.map((item) => (
+                <div 
+                  key={item.id} 
+                  className="gallery-card"
+                  onClick={() => setLightboxItem(item)}
+                >
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://rbjjt.com/wp-content/uploads/2026/01/1619887156_mulagandha_kuti_vihar.jpg.webp";
+                    }}
+                  />
+                  <div className="gallery-overlay">
+                    <span style={{ 
+                      display: 'inline-block',
+                      background: 'rgba(217, 119, 6, 0.9)', 
+                      color: '#FFF', 
+                      fontSize: '0.72rem', 
+                      padding: '2px 8px', 
+                      borderRadius: '12px',
+                      width: 'fit-content',
+                      marginBottom: '0.3rem',
+                      fontWeight: 700
+                    }}>
+                      {item.category}
+                    </span>
+                    <h5>{item.title}</h5>
+                    <p>{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: Video Gallery */}
+        {activeMainTab === 'videos' && (
+          <div className="animate-fade-in">
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+              gap: '2rem'
+            }}>
+              {DHAMMA_VIDEOS.map((vid) => (
+                <div 
+                  key={vid.id}
+                  style={{
+                    background: 'var(--color-surface)',
+                    border: '1.5px solid var(--color-border)',
+                    borderRadius: 'var(--radius-xl)',
+                    overflow: 'hidden',
+                    boxShadow: 'var(--shadow-md)',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease'
+                  }}
+                  className="video-showcase-card"
+                >
+                  {/* Video Player */}
+                  <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', background: '#000' }}>
+                    <video 
+                      src={vid.videoUrl}
+                      controls 
+                      poster={vid.poster}
+                      preload="metadata"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    >
+                      आपका ब्राउज़र वीडियो को सपोर्ट नहीं करता।
+                    </video>
+                  </div>
+
+                  {/* Video Details */}
+                  <div style={{ padding: '1.4rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-gold-dark)', background: 'rgba(217,119,6,0.1)', padding: '2px 8px', borderRadius: '10px' }}>
+                        {vid.speaker}
+                      </span>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
+                        ⏱ {vid.duration}
+                      </span>
+                    </div>
+
+                    <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.2rem', color: 'var(--color-primary)', marginBottom: '0.5rem' }}>
+                      {vid.title}
+                    </h4>
+
+                    <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', lineHeight: 1.65, margin: 0 }}>
+                      {vid.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: Dhammadesana & Sacred Discourses */}
+        {activeMainTab === 'discourses' && (
+          <div className="animate-fade-in">
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+              gap: '1.75rem'
+            }}>
+              {DHAMMA_DISCOURSES.map((disc) => (
+                <div 
+                  key={disc.id}
+                  style={{
+                    background: 'var(--color-surface)',
+                    border: '1.5px solid var(--color-border)',
+                    borderRadius: 'var(--radius-xl)',
+                    padding: '1.75rem 1.5rem',
+                    boxShadow: 'var(--shadow-sm)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem' }}>
+                    <span style={{
+                      background: 'linear-gradient(135deg, var(--color-primary), var(--color-gold))',
+                      color: '#FFF',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      padding: '3px 10px',
+                      borderRadius: '12px'
+                    }}>
+                      ☸ {disc.theme}
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                      {disc.source}
+                    </span>
+                  </div>
+
+                  <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.2rem', color: 'var(--color-primary)', marginBottom: '0.75rem' }}>
+                    {disc.sutta}
+                  </h4>
+
+                  {/* Pali Gatha */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(122, 20, 20, 0.06), rgba(217, 119, 6, 0.1))',
+                    borderLeft: '3px solid var(--color-gold)',
+                    borderRadius: '0 var(--radius-md) var(--radius-md) 0',
+                    padding: '0.75rem 1rem',
+                    marginBottom: '1rem',
+                    color: 'var(--color-primary)',
+                    fontWeight: 700,
+                    fontSize: '0.98rem',
+                    fontStyle: 'italic',
+                    lineHeight: 1.55
+                  }}>
+                    {disc.pali}
+                  </div>
+
+                  {/* Hindi Meaning */}
+                  <div>
+                    <strong style={{ fontSize: '0.82rem', color: 'var(--color-gold-dark)', display: 'block', marginBottom: '0.25rem' }}>
+                      📖 पावन हिंदी भावार्थ:
+                    </strong>
+                    <p style={{ color: 'var(--color-text-main)', fontSize: '0.94rem', lineHeight: 1.68, margin: 0 }}>
+                      {disc.meaning}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox Modal for Photos */}
       {lightboxItem && (
         <div className="modal-backdrop" onClick={() => setLightboxItem(null)}>
-          <div className="modal-content" style={{ maxWidth: '800px', padding: 0, overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" style={{ maxWidth: '820px', padding: 0, overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
             <div style={{ position: 'relative' }}>
               <img 
                 src={lightboxItem.image} 
                 alt={lightboxItem.title} 
-                style={{ width: '100%', maxHeight: '550px', objectFit: 'contain', backgroundColor: '#000' }}
+                style={{ width: '100%', maxHeight: '560px', objectFit: 'contain', backgroundColor: '#000' }}
               />
               <button 
                 onClick={() => setLightboxItem(null)}
@@ -101,14 +278,23 @@ export function GallerySection() {
                 <X size={20} />
               </button>
             </div>
-            <div style={{ padding: '1.5rem 2rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
-                <span className="badge-tag" style={{ margin: 0 }}>{lightboxItem.category}</span>
-                <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', color: 'var(--color-primary)' }}>
-                  {lightboxItem.title}
-                </h4>
-              </div>
-              <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.7 }}>
+            <div style={{ padding: '1.25rem 1.5rem' }}>
+              <span style={{ 
+                display: 'inline-block',
+                background: 'var(--color-gold)', 
+                color: '#FFF', 
+                fontSize: '0.75rem', 
+                padding: '2px 8px', 
+                borderRadius: '12px',
+                fontWeight: 700,
+                marginBottom: '0.4rem'
+              }}>
+                {lightboxItem.category}
+              </span>
+              <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', color: 'var(--color-primary)', marginBottom: '0.4rem' }}>
+                {lightboxItem.title}
+              </h4>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem', margin: 0 }}>
                 {lightboxItem.desc}
               </p>
             </div>

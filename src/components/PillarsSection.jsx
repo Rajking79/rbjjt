@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Sparkles, GraduationCap, HeartHandshake, HeartPulse, 
-  ShieldCheck, Check, ArrowRight, X, Heart 
+  ShieldCheck, Check, ArrowRight, X, Heart, ExternalLink 
 } from 'lucide-react';
 import { PILLARS } from '../data/trustData';
 
@@ -24,7 +24,7 @@ export function PillarsSection({ onOpenDonateModal }) {
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div className="badge-tag">
+          <div className="badge-tag animate-bounce-subtle">
             <Sparkles size={14} />
             <span>पंचशील आधारित पंच आधार स्तंभ</span>
           </div>
@@ -37,15 +37,20 @@ export function PillarsSection({ onOpenDonateModal }) {
           </p>
         </div>
 
-        {/* Pillars Grid */}
-        <div className="pillars-grid">
+        {/* 5 Pillars Grid */}
+        <div className="pillars-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+          gap: '1.75rem'
+        }}>
           {PILLARS.map((pillar) => (
             <div key={pillar.id} className="pillar-card">
               {/* Media with Image */}
-              <div className="pillar-media">
+              <div className="pillar-media" style={{ height: '190px', position: 'relative', overflow: 'hidden' }}>
                 <img 
                   src={pillar.image} 
                   alt={pillar.titleHi}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = "https://rbjjt.com/wp-content/uploads/2026/03/icon_no_bg_256.png";
@@ -58,15 +63,21 @@ export function PillarsSection({ onOpenDonateModal }) {
 
               {/* Body */}
               <div className="pillar-body">
-                <h3 className="pillar-title">{pillar.titleHi}</h3>
-                <span className="pillar-tagline">{pillar.tagline}</span>
-                <p className="pillar-desc">{pillar.description}</p>
+                <h3 className="pillar-title" style={{ fontSize: '1.3rem', marginBottom: '0.25rem', color: 'var(--color-primary)' }}>
+                  {pillar.titleHi}
+                </h3>
+                <span className="pillar-tagline" style={{ display: 'block', color: 'var(--color-gold-dark)', fontWeight: 600, fontSize: '0.86rem', marginBottom: '0.65rem' }}>
+                  {pillar.tagline}
+                </span>
+                <p className="pillar-desc" style={{ color: 'var(--color-text-muted)', fontSize: '0.92rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+                  {pillar.description}
+                </p>
 
                 {/* Key Points */}
-                <ul className="pillar-points">
+                <ul className="pillar-points" style={{ marginBottom: '1.2rem' }}>
                   {pillar.points.slice(0, 3).map((point, idx) => (
-                    <li key={idx} className="pillar-point-item">
-                      <Check size={16} />
+                    <li key={idx} className="pillar-point-item" style={{ fontSize: '0.88rem' }}>
+                      <Check size={16} color="var(--color-success)" style={{ flexShrink: 0 }} />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -75,9 +86,9 @@ export function PillarsSection({ onOpenDonateModal }) {
                 <button 
                   onClick={() => setSelectedPillar(pillar)}
                   className="btn btn-outline-gold btn-sm"
-                  style={{ marginTop: '1.25rem', width: '100%' }}
+                  style={{ marginTop: 'auto', width: '100%', justifyContent: 'center' }}
                 >
-                  <span>विस्तार से जानें</span>
+                  <span>विस्तार से जानें व फॉर्म भरें</span>
                   <ArrowRight size={15} />
                 </button>
               </div>
@@ -89,13 +100,16 @@ export function PillarsSection({ onOpenDonateModal }) {
       {/* Pillar Detail Modal */}
       {selectedPillar && (
         <div className="modal-backdrop" onClick={() => setSelectedPillar(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '640px' }}>
             <div className="modal-header">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <div style={{ color: selectedPillar.accentColor }}>
                   {getIcon(selectedPillar.icon)}
                 </div>
-                <h3 className="modal-title">{selectedPillar.titleHi}</h3>
+                <div>
+                  <h3 className="modal-title" style={{ margin: 0 }}>{selectedPillar.titleHi}</h3>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--color-gold-dark)' }}>{selectedPillar.tagline}</span>
+                </div>
               </div>
               <button 
                 onClick={() => setSelectedPillar(null)}
@@ -107,48 +121,47 @@ export function PillarsSection({ onOpenDonateModal }) {
             </div>
 
             <div className="modal-body">
-              <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '220px', marginBottom: '1.5rem' }}>
+              <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', maxHeight: '220px', marginBottom: '1.25rem' }}>
                 <img 
                   src={selectedPillar.image} 
-                  alt={selectedPillar.titleHi}
+                  alt={selectedPillar.titleHi} 
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
 
-              <h4 style={{ color: 'var(--color-gold-dark)', fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.1rem' }}>
-                {selectedPillar.tagline}
-              </h4>
-              <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.8, marginBottom: '1.5rem' }}>
+              <p style={{ lineHeight: 1.7, color: 'var(--color-text-main)', marginBottom: '1.25rem', fontSize: '0.98rem' }}>
                 {selectedPillar.description}
               </p>
 
-              <h5 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)', marginBottom: '0.8rem', fontSize: '1.1rem' }}>
-                मुख्य कार्य एवं योजनाएँ:
-              </h5>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1rem', color: 'var(--color-primary)', marginBottom: '0.75rem', fontWeight: 700 }}>
+                मुख्य कार्य योजना व विशेषताएं:
+              </h4>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.5rem' }}>
                 {selectedPillar.points.map((pt, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.95rem' }}>
-                    <Check size={18} color="var(--color-success)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.92rem', color: 'var(--color-text-muted)' }}>
+                    <Check size={16} color="var(--color-success)" style={{ flexShrink: 0 }} />
                     <span>{pt}</span>
                   </li>
                 ))}
               </ul>
 
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                <button 
-                  onClick={() => { setSelectedPillar(null); onOpenDonateModal(); }} 
-                  className="btn btn-gold"
-                >
-                  <Heart size={18} fill="#FFF" />
-                  <span>इस प्रकल्प में दान करें</span>
-                </button>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <a 
                   href="#forms" 
-                  onClick={() => setSelectedPillar(null)} 
+                  onClick={() => setSelectedPillar(null)}
                   className="btn btn-primary"
+                  style={{ flex: 1, justifyContent: 'center' }}
                 >
-                  <span>धर्माधिकारी फॉर्म भरें</span>
+                  <span>संबंधित ऑनलाइन फॉर्म भरें</span>
+                  <ExternalLink size={16} />
                 </a>
+                <button 
+                  onClick={() => { setSelectedPillar(null); if (onOpenDonateModal) onOpenDonateModal(); }} 
+                  className="btn btn-gold"
+                >
+                  <Heart size={16} fill="#FFF" />
+                  <span>सहयोग करें</span>
+                </button>
               </div>
             </div>
           </div>
