@@ -1,9 +1,9 @@
 import React from 'react';
-import { Heart, UserPlus, ArrowRight, Sparkles, BookOpen, ShieldCheck, Compass, CheckCircle } from 'lucide-react';
+import { Heart, UserPlus, Sparkles, BookOpen, ShieldCheck, Play } from 'lucide-react';
 import { TypewriterText } from './TypewriterText';
 import { TRUST_INFO } from '../data/trustData';
 
-export function Hero({ onOpenDonateModal }) {
+export function Hero({ onOpenDonateModal, onOpenVideoModal }) {
   const animatedWords = [
     "सनातन धम्म का प्रचार",
     "निःशुल्क बाल शिक्षा",
@@ -39,7 +39,7 @@ export function Hero({ onOpenDonateModal }) {
 
             {/* Subtext */}
             <p className="hero-desc">
-              <strong>राष्ट्रीय बौद्ध जन जागरण ट्रस्ट (RBJJT)</strong> समाज में शांति, करुणा, मैत्री और समता के महान संदेशों को स्थापित करने के लिए समर्पित है। हमारा संकल्प है कि शिक्षा, दीक्षा, स्वास्थ्य, संस्कार और सुरक्षा के माध्यम से एक प्रबुद्ध भारत का निर्माण हो।
+              <strong>राष्ट्रीय बौद्ध जन जागरण ट्रस्ट (RBJJT - Reg. No. 069/16)</strong> समाज में शांति, करुणा, मैत्री और समता के महान संदेशों को स्थापित करने के लिए समर्पित है। हमारा संकल्प है कि शिक्षा, दीक्षा, स्वास्थ्य, संस्कार और सुरक्षा के माध्यम से एक प्रबुद्ध भारत का निर्माण हो।
             </p>
 
             {/* CTA Group */}
@@ -48,14 +48,25 @@ export function Hero({ onOpenDonateModal }) {
                 onClick={onOpenDonateModal} 
                 className="btn btn-gold btn-lg pulse-animation"
               >
-                <Heart size={19} fill="#FFF" />
+                <Heart size={18} fill="#FFF" />
                 <span>पुण्य लाभ लें (दान करें)</span>
               </button>
 
               <a href="#forms" className="btn btn-primary btn-lg">
-                <UserPlus size={19} />
-                <span>धर्माधिकारी बनें</span>
+                <UserPlus size={18} />
+                <span>ऑनलाइन फॉर्म्स</span>
               </a>
+
+              {onOpenVideoModal && (
+                <button 
+                  onClick={onOpenVideoModal}
+                  className="btn btn-outline btn-lg"
+                  title="ट्रस्ट का परिचय वीडियो देखें"
+                >
+                  <Play size={17} fill="currentColor" />
+                  <span>ट्रस्ट वीडियो देखें</span>
+                </button>
+              )}
 
               <a href="#pillars" className="btn btn-outline btn-lg">
                 <BookOpen size={17} />
@@ -84,7 +95,7 @@ export function Hero({ onOpenDonateModal }) {
                   <h3>280+</h3>
                   <span className="stat-icon-mini">💍</span>
                 </div>
-                <p>बौद्ध संस्कार विवाह</p>
+                <p>दहेज-मुक्त संस्कार विवाह</p>
               </div>
             </div>
           </div>
@@ -116,7 +127,7 @@ export function Hero({ onOpenDonateModal }) {
 
             {/* Floating Badges */}
             <div className="hero-badge-floating animate-float">
-              <ShieldCheck size={20} color="var(--color-gold)" />
+              <ShieldCheck size={18} color="var(--color-gold)" />
               <div>
                 <span>पंजीकृत ट्रस्ट: {TRUST_INFO.regNo}</span>
               </div>

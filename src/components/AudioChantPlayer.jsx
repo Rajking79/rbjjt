@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Volume2, VolumeX, Sparkles, Music } from 'lucide-react';
+import { Volume2, VolumeX, MessageCircle } from 'lucide-react';
+import { TRUST_INFO } from '../data/trustData';
 
 export function AudioChantPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -53,39 +54,76 @@ export function AudioChantPlayer() {
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: '24px',
-      left: '24px',
-      zIndex: 990,
-      background: 'rgba(36, 26, 21, 0.92)',
-      backdropFilter: 'blur(10px)',
-      border: '1.5px solid var(--color-gold)',
-      color: '#FFF',
-      borderRadius: 'var(--radius-full)',
-      padding: '0.45rem 1.1rem',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.65rem',
-      boxShadow: 'var(--shadow-gold)',
-      transition: 'all 0.3s ease'
-    }}>
+    <aside 
+      className="floating-actions-dock"
+      aria-label="Floating Action Dock"
+      style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        zIndex: 990,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.65rem'
+      }}
+    >
+      {/* 1. Meditative 432Hz Audio Bell Toggle (Right-aligned, never blocks text!) */}
       <button 
         onClick={toggleChant} 
-        style={{ color: '#FBBF24', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-        aria-label="Toggle Meditative Bell"
-        title={isPlaying ? "शांति ध्वनि बंद करें" : "432Hz ध्यान घंटी बजाएं"}
+        style={{
+          background: isPlaying ? 'linear-gradient(135deg, #7A1414, #D97706)' : 'rgba(36, 26, 21, 0.92)',
+          color: '#FFF',
+          border: '1.5px solid var(--color-gold)',
+          borderRadius: 'var(--radius-full)',
+          padding: '0.5rem 1rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          cursor: 'pointer',
+          boxShadow: 'var(--shadow-md)',
+          fontSize: '0.85rem',
+          fontWeight: 700,
+          backdropFilter: 'blur(8px)',
+          transition: 'all 0.25s ease'
+        }}
+        title={isPlaying ? "ध्यान ध्वनि बंद करें" : "432Hz पावन ध्यान घंटी बजाएं"}
       >
-        {isPlaying ? <Volume2 size={18} /> : <VolumeX size={18} />}
+        {isPlaying ? (
+          <>
+            <Volume2 size={17} color="#FDE68A" />
+            <span style={{ color: '#FDE68A' }}>ध्यान ध्वनि चालू</span>
+          </>
+        ) : (
+          <>
+            <VolumeX size={17} color="#D1BEAC" />
+            <span>ध्यान संगीत</span>
+          </>
+        )}
       </button>
 
-      <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#FDF4E7' }}>
-        {isPlaying ? "साधना घंटी: सक्रिय (432Hz)" : "ध्यान संगीत (Chant Bell)"}
-      </span>
-
-      {isPlaying && (
-        <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block', animation: 'pulseGlow 1.5s infinite' }}></span>
-      )}
-    </div>
+      {/* 2. Official WhatsApp Help Floating Button */}
+      <a 
+        href={`https://wa.me/${TRUST_INFO.whatsapp.replace(/[^0-9]/g, '')}`} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={{
+          width: '46px',
+          height: '46px',
+          borderRadius: 'var(--radius-full)',
+          backgroundColor: '#25D366',
+          color: '#FFF',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 14px rgba(37, 211, 102, 0.45)',
+          transition: 'transform 0.25s ease',
+          flexShrink: 0
+        }}
+        title="व्हाट्सएप पर संपर्क करें"
+        aria-label="WhatsApp Contact"
+      >
+        <MessageCircle size={24} />
+      </a>
+    </aside>
   );
 }

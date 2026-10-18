@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, UserCheck, Heart, Award, FileText, CheckCircle2, 
-  Printer, Download, AlertCircle, RefreshCw, Eye 
+  Printer, Download, AlertCircle, RefreshCw, Upload, Camera, 
+  Activity, ShieldCheck, QrCode 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { TRUST_INFO } from '../data/trustData';
 
 export function FormsSection({ onRecordAdded }) {
-  const [activeTab, setActiveTab] = useState('dhammadhikari'); // 'dhammadhikari' | 'matrimonial' | 'diksha' | 'marriageCert'
+  const [activeTab, setActiveTab] = useState('dhammadhikari'); // 'dhammadhikari' | 'matrimonial' | 'diksha' | 'marriageCert' | 'healthCamp'
   const [submissionSuccess, setSubmissionSuccess] = useState(null);
   const [errors, setErrors] = useState({});
 
-  // Dhammadhikari Form State
+  // 1. Dhammadhikari Form State
   const [dhammaForm, setDhammaForm] = useState({
     fullName: '',
-    fatherName: '',
+    fatherHusbandName: '',
+    motherName: '',
     dob: '',
     gender: 'पुरुष (Male)',
-    qualification: '',
+    bloodGroup: 'B+',
+    idType: 'आधार कार्ड (Aadhaar)',
+    idNumber: '',
+    qualification: 'स्नातक (Graduate)',
+    occupation: '',
     mobile: '',
     whatsapp: '',
     email: '',
@@ -28,97 +34,134 @@ export function FormsSection({ onRecordAdded }) {
     district: '',
     state: 'उत्तर प्रदेश',
     pincode: '',
-    currentResponsibility: '',
+    previousExp: '',
+    proposedRole: 'ग्राम धर्माधिकारी (Village In-charge)',
+    photoUrl: '',
     pledgeAccepted: false
   });
 
-  // Matrimonial Form State
+  // 2. Matrimonial Form State
   const [matriForm, setMatriForm] = useState({
     candidateType: 'वर (Groom)',
     fullName: '',
     fatherName: '',
     motherName: '',
     dob: '',
-    height: '',
+    age: '',
+    height: '5 फीट 6 इंच',
+    complexion: 'गेहुआं (Fair)',
     education: '',
     occupation: '',
     monthlyIncome: '',
+    fatherOccupation: '',
+    brothers: '1',
+    sisters: '1',
     village: '',
     district: '',
     state: 'उत्तर प्रदेश',
-    mobile: '',
-    buddhistValues: 'हाँ, बौद्ध रीति-रिवाज से विवाह में पूर्ण आस्था है',
+    pincode: '',
+    guardianMobile: '',
+    candidateMobile: '',
+    photoUrl: '',
+    buddhistValues: 'हाँ, बुद्ध एवं बाबासाहब के विचारों में पूर्ण आस्था है',
     dowryFreePledge: false
   });
 
-  // Diksha Form State
+  // 3. Diksha Form State
   const [dikshaForm, setDikshaForm] = useState({
     fullName: '',
     fatherHusbandName: '',
     dob: '',
+    age: '',
+    gender: 'पुरुष (Male)',
+    mobile: '',
+    email: '',
+    address: '',
+    district: '',
+    state: 'उत्तर प्रदेश',
+    dikshaType: 'व्यक्तिगत दीक्षा (Individual)',
+    familyMembersCount: '1',
+    preferredDate: '',
+    preferredLocation: 'ऋषिपत्तन, सारनाथ (वाराणसी)',
+    panchsheelPledge: false
+  });
+
+  // 4. Marriage Certificate Form State
+  const [certForm, setCertForm] = useState({
+    groomName: '',
+    groomFather: '',
+    groomDob: '',
+    groomAddress: '',
+    brideName: '',
+    brideFather: '',
+    brideDob: '',
+    brideAddress: '',
+    marriageDate: '',
+    marriagePlace: 'बौद्ध विहार / गृह स्थान',
+    witnessName1: '',
+    witnessPhone1: '',
+    witnessName2: '',
+    witnessPhone2: '',
+    presidingBhikkhu: 'पूज्य भिक्खु संघ',
+    contactMobile: '',
+    couplePhotoUrl: '',
+    marriagePledge: false
+  });
+
+  // 5. Health & Vipassana Camp Form State
+  const [healthForm, setHealthForm] = useState({
+    fullName: '',
+    guardianName: '',
+    age: '',
     gender: 'पुरुष (Male)',
     mobile: '',
     address: '',
     district: '',
-    preferredDate: '',
-    preferredLocation: 'सारनाथ, वाराणसी (Sarnath Center)',
-    panchsheelPledge: false
+    state: 'उत्तर प्रदेश',
+    healthIssue: 'मानसिक तनाव एवं अनिद्रा (Stress & Insomnia)',
+    campType: '10 दिवसीय विपश्यना ध्यान साधना शिविर (सारनाथ)',
+    pastExperience: 'नहीं (प्रथम बार)',
+    healthPledge: false
   });
 
-  // Marriage Certificate Form State
-  const [certForm, setCertForm] = useState({
-    groomName: '',
-    groomFather: '',
-    brideName: '',
-    brideFather: '',
-    marriageDate: '',
-    marriagePlace: 'बौद्ध विहार / गृह स्थान',
-    witnessName1: '',
-    witnessName2: '',
-    presidingBhikkhu: 'पूज्य भिक्खु संघ',
-    contactMobile: ''
-  });
-
-  // Load drafts from localStorage
-  useEffect(() => {
-    const savedDhamma = localStorage.getItem('rbjjt_draft_dhamma');
-    if (savedDhamma) {
-      try { setDhammaForm(JSON.parse(savedDhamma)); } catch (e) {}
+  // Generic file/photo upload simulation with live preview
+  const handlePhotoUpload = (e, formType) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (formType === 'dhamma') setDhammaForm(prev => ({ ...prev, photoUrl: reader.result }));
+        else if (formType === 'matri') setMatriForm(prev => ({ ...prev, photoUrl: reader.result }));
+        else if (formType === 'cert') setCertForm(prev => ({ ...prev, couplePhotoUrl: reader.result }));
+      };
+      reader.readAsDataURL(file);
     }
-  }, []);
-
-  // Save drafts
-  const handleDhammaChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const val = type === 'checkbox' ? checked : value;
-    const updated = { ...dhammaForm, [name]: val };
-    setDhammaForm(updated);
-    localStorage.setItem('rbjjt_draft_dhamma', JSON.stringify(updated));
   };
 
-  const handleMatriChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const val = type === 'checkbox' ? checked : value;
-    setMatriForm(prev => ({ ...prev, [name]: val }));
+  const saveRecord = (record) => {
+    let existing = [];
+    try {
+      const saved = localStorage.getItem('rbjjt_records');
+      if (saved) existing = JSON.parse(saved);
+    } catch (e) {}
+
+    const updated = [record, ...existing];
+    localStorage.setItem('rbjjt_records', JSON.stringify(updated));
+    if (onRecordAdded) onRecordAdded(updated.length);
   };
 
-  const handleDikshaChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const val = type === 'checkbox' ? checked : value;
-    setDikshaForm(prev => ({ ...prev, [name]: val }));
+  const triggerCelebration = () => {
+    try {
+      confetti({ particleCount: 75, spread: 70, origin: { y: 0.6 } });
+    } catch (e) {}
   };
 
-  const handleCertChange = (e) => {
-    const { name, value } = e.target;
-    setCertForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  // Submit Handler for Dhammadhikari
+  // 1. Submit Dhammadhikari
   const handleDhammaSubmit = (e) => {
     e.preventDefault();
     const newErrors = {};
     if (!dhammaForm.fullName.trim()) newErrors.fullName = "कृपया पूरा नाम दर्ज करें";
-    if (!dhammaForm.fatherName.trim()) newErrors.fatherName = "पिता/अभिभावक का नाम आवश्यक है";
+    if (!dhammaForm.fatherHusbandName.trim()) newErrors.fatherHusbandName = "पिता/पति का नाम आवश्यक है";
     if (!dhammaForm.mobile.trim() || dhammaForm.mobile.length < 10) newErrors.mobile = "मान्य 10 अंकों का मोबाइल नंबर दर्ज करें";
     if (!dhammaForm.district.trim()) newErrors.district = "जनपद/जिला का नाम दर्ज करें";
     if (!dhammaForm.pledgeAccepted) newErrors.pledgeAccepted = "प्रतिज्ञा पत्र स्वीकार करना अनिवार्य है";
@@ -140,7 +183,7 @@ export function FormsSection({ onRecordAdded }) {
       state: dhammaForm.state,
       status: 'स्वीकृत (Approved)',
       date: new Date().toLocaleDateString('hi-IN'),
-      details: `ब्लॉक: ${dhammaForm.block || 'एन/ए'}, शिक्षा: ${dhammaForm.qualification || 'एन/ए'}, गांव: ${dhammaForm.village || 'एन/ए'}`
+      details: `पद: ${dhammaForm.proposedRole}, ब्लॉक: ${dhammaForm.block || 'एन/ए'}, शिक्षा: ${dhammaForm.qualification}`
     };
 
     saveRecord(record);
@@ -148,23 +191,26 @@ export function FormsSection({ onRecordAdded }) {
 
     setSubmissionSuccess({
       id: appId,
-      title: "धर्माधिकारी आवेदन सफलतापूर्वक पंजीकृत हुआ!",
-      subtitle: "राष्ट्रीय बौद्ध जन जागरण ट्रस्ट की ओर से आपका हार्दिक अभिनंदन।",
+      title: "धर्माधिकारी आवेदन पत्र सफलतापूर्वक पंजीकृत हुआ!",
+      subtitle: "राष्ट्रीय बौद्ध जन जागरण ट्रस्ट की ओर से आपका हार्दिक अभिनंदन। आपकी अधिकृत पहचान पर्ची तैयार है।",
       name: dhammaForm.fullName,
-      fatherName: dhammaForm.fatherName,
+      fatherName: dhammaForm.fatherHusbandName,
       phone: dhammaForm.mobile,
       district: dhammaForm.district,
+      state: dhammaForm.state,
+      role: dhammaForm.proposedRole,
+      photo: dhammaForm.photoUrl || "https://rbjjt.com/wp-content/uploads/2026/03/icon_no_bg_256.png",
       date: new Date().toLocaleDateString('hi-IN'),
-      type: "धर्माधिकारी पहचान पर्ची (ID Slip)"
+      type: "धर्माधिकारी पहचान पत्र (ID Slip)"
     });
   };
 
-  // Submit Handler for Matrimonial
+  // 2. Submit Matrimonial
   const handleMatriSubmit = (e) => {
     e.preventDefault();
     const newErrors = {};
     if (!matriForm.fullName.trim()) newErrors.matriName = "कृपया प्रत्याशी का नाम दर्ज करें";
-    if (!matriForm.mobile.trim()) newErrors.matriMobile = "संपर्क नंबर दर्ज करें";
+    if (!matriForm.guardianMobile.trim()) newErrors.guardianMobile = "अभिभावक का फोन नंबर दर्ज करें";
     if (!matriForm.dowryFreePledge) newErrors.dowryFreePledge = "दहेज-मुक्त संकल्प अनिवार्य है";
 
     if (Object.keys(newErrors).length > 0) {
@@ -177,12 +223,12 @@ export function FormsSection({ onRecordAdded }) {
     const record = {
       id: appId,
       type: 'matrimonial',
-      typeName: 'विवाह पंजीकरण',
+      typeName: 'आवाह-विवाह बायोडाटा',
       name: matriForm.fullName,
-      phone: matriForm.mobile,
+      phone: matriForm.guardianMobile,
       district: matriForm.district,
       state: matriForm.state,
-      status: 'सक्रिय (Active)',
+      status: 'स्वीकृत (Approved)',
       date: new Date().toLocaleDateString('hi-IN'),
       details: `${matriForm.candidateType}, शिक्षा: ${matriForm.education}, व्यवसाय: ${matriForm.occupation}`
     };
@@ -192,30 +238,29 @@ export function FormsSection({ onRecordAdded }) {
 
     setSubmissionSuccess({
       id: appId,
-      title: "आवाह-विवाह बायोडाटा पंजीकरण सफल!",
-      subtitle: "दहेज-मुक्त बौद्ध संस्कार वैवाहिक सूची में आपका नाम जोड़ दिया गया है।",
+      title: "बौद्ध वैवाहिक बायोडाटा पंजीकृत हुआ!",
+      subtitle: "दहेज-मुक्त आदर्श बौद्ध वैवाहिक मिशन में आपका स्वागत है।",
       name: matriForm.fullName,
       fatherName: matriForm.fatherName,
-      phone: matriForm.mobile,
+      phone: matriForm.guardianMobile,
       district: matriForm.district,
+      state: matriForm.state,
+      role: `${matriForm.candidateType} - ${matriForm.education}`,
+      photo: matriForm.photoUrl || "https://rbjjt.com/wp-content/uploads/2026/08/Sacraments-%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A4%BE%E0%A4%B0-of-RBJJT.jpeg",
       date: new Date().toLocaleDateString('hi-IN'),
-      type: "वैवाहिक पंजीकरण पर्ची"
+      type: "वैवाहिक बायोडाटा रसीद"
     });
   };
 
-  // Submit Handler for Diksha
+  // 3. Submit Diksha
   const handleDikshaSubmit = (e) => {
     e.preventDefault();
     if (!dikshaForm.fullName.trim()) {
-      setErrors({ dikshaName: "कृपया नाम दर्ज करें" });
+      setErrors({ dikshaName: "कृपया आवेदक का नाम भरें" });
       return;
     }
     if (!dikshaForm.mobile.trim()) {
-      setErrors({ dikshaMobile: "मोबाइल नंबर दर्ज करें" });
-      return;
-    }
-    if (!dikshaForm.panchsheelPledge) {
-      setErrors({ panchsheelPledge: "पंचशील पालन का संकल्प अनिवार्य है" });
+      setErrors({ dikshaMobile: "मोबाइल नंबर आवश्यक है" });
       return;
     }
 
@@ -224,14 +269,14 @@ export function FormsSection({ onRecordAdded }) {
     const record = {
       id: appId,
       type: 'diksha',
-      typeName: 'दीक्षा आवेदन',
+      typeName: 'धम्म दीक्षा आवेदन',
       name: dikshaForm.fullName,
       phone: dikshaForm.mobile,
-      district: dikshaForm.district || 'वाराणसी',
-      state: 'उत्तर प्रदेश',
-      status: 'पुष्टि प्रतीक्षारत',
+      district: dikshaForm.district,
+      state: dikshaForm.state,
+      status: 'स्वीकृत (Approved)',
       date: new Date().toLocaleDateString('hi-IN'),
-      details: `केंद्र: ${dikshaForm.preferredLocation}, इच्छुक तिथि: ${dikshaForm.preferredDate || 'जल्द ही'}`
+      details: `प्रकार: ${dikshaForm.dikshaType}, स्थल: ${dikshaForm.preferredLocation}`
     };
 
     saveRecord(record);
@@ -239,26 +284,29 @@ export function FormsSection({ onRecordAdded }) {
 
     setSubmissionSuccess({
       id: appId,
-      title: "दीक्षा संकल्प पत्र सफलतापूर्वक प्राप्त हुआ!",
-      subtitle: "तथागत बुद्ध के शील, समाधि और प्रज्ञा मार्ग पर आपका स्वागत है।",
+      title: "बौद्ध धम्म दीक्षा आवेदन स्वीकृत हुआ!",
+      subtitle: "पंचशील और त्रिशरण की पावन दीक्षा हेतु आपका पंजीकरण सफल रहा।",
       name: dikshaForm.fullName,
       fatherName: dikshaForm.fatherHusbandName,
       phone: dikshaForm.mobile,
       district: dikshaForm.district,
+      state: dikshaForm.state,
+      role: `दीक्षा स्थल: ${dikshaForm.preferredLocation}`,
+      photo: "https://rbjjt.com/wp-content/uploads/2025/12/Initiation-%E0%A4%A6%E0%A5%80%E0%A4%95%E0%A5%8D%E0%A4%97%E0%A4%BE.png",
       date: new Date().toLocaleDateString('hi-IN'),
-      type: "दीक्षा संकल्प रसीद"
+      type: "धम्म दीक्षा पंजीकरण पत्र"
     });
   };
 
-  // Submit Handler for Marriage Certificate
+  // 4. Submit Marriage Certificate
   const handleCertSubmit = (e) => {
     e.preventDefault();
     if (!certForm.groomName.trim() || !certForm.brideName.trim()) {
-      setErrors({ certNames: "वर एवं वधू दोनों का नाम दर्ज करना आवश्यक है" });
+      setErrors({ certCouple: "वर एवं वधू दोनों का नाम दर्ज करें" });
       return;
     }
-    if (!certForm.contactMobile.trim()) {
-      setErrors({ certMobile: "संपर्क नंबर दर्ज करें" });
+    if (!certForm.marriageDate) {
+      setErrors({ certDate: "विवाह की तिथि आवश्यक है" });
       return;
     }
 
@@ -267,14 +315,14 @@ export function FormsSection({ onRecordAdded }) {
     const record = {
       id: appId,
       type: 'marriageCert',
-      typeName: 'विवाह प्रमाण-पत्र आवेदन',
+      typeName: 'विवाह प्रमाण-पत्र',
       name: `${certForm.groomName} संग ${certForm.brideName}`,
       phone: certForm.contactMobile,
-      district: 'सारनाथ, वाराणसी',
-      state: 'उत्तर प्रदेश',
-      status: 'प्रमाणित (Verified)',
+      district: certForm.marriagePlace,
+      state: "उत्तर प्रदेश",
+      status: 'अधिकृत जारी (Issued)',
       date: new Date().toLocaleDateString('hi-IN'),
-      details: `विवाह तिथि: ${certForm.marriageDate || 'हाल ही में'}, साक्षी: ${certForm.witnessName1}`
+      details: `विवाह तिथि: ${certForm.marriageDate}, स्थल: ${certForm.marriagePlace}`
     };
 
     saveRecord(record);
@@ -282,36 +330,60 @@ export function FormsSection({ onRecordAdded }) {
 
     setSubmissionSuccess({
       id: appId,
-      title: "विवाह प्रमाण-पत्र आवेदन सफलतापूर्वक दर्ज हुआ!",
-      subtitle: "सत्यापन उपरांत अधिकृत बौद्ध विवाह प्रमाण-पत्र जारी किया जाएगा।",
-      name: `${certForm.groomName} एवं ${certForm.brideName}`,
+      title: "बौद्ध विवाह प्रमाण-पत्र जारी हुआ!",
+      subtitle: "राष्ट्रीय बौद्ध जन जागरण ट्रस्ट द्वारा विधिवत प्रमाणित वैवाहिक प्रमाण-पत्र।",
+      name: `${certForm.groomName} & ${certForm.brideName}`,
       fatherName: `वर पिता: ${certForm.groomFather || 'एन/ए'} | वधू पिता: ${certForm.brideFather || 'एन/ए'}`,
       phone: certForm.contactMobile,
-      district: "सारनाथ, वाराणसी",
+      district: certForm.marriagePlace,
+      state: "सारनाथ (वाराणसी)",
+      role: `विवाह तिथि: ${certForm.marriageDate}`,
+      photo: certForm.couplePhotoUrl || "https://rbjjt.com/wp-content/uploads/2026/08/Sacraments-%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A4%BE%E0%A4%B0-of-RBJJT.jpeg",
       date: new Date().toLocaleDateString('hi-IN'),
-      type: "विवाह प्रमाण-पत्र आवेदन रसीद"
+      type: "अधिकृत बौद्ध विवाह प्रमाण-पत्र (Official Certificate)"
     });
   };
 
-  const saveRecord = (record) => {
-    const existing = JSON.parse(localStorage.getItem('rbjjt_records') || '[]');
-    const updated = [record, ...existing];
-    localStorage.setItem('rbjjt_records', JSON.stringify(updated));
-    if (onRecordAdded) onRecordAdded(updated.length);
-  };
+  // 5. Submit Health Camp
+  const handleHealthSubmit = (e) => {
+    e.preventDefault();
+    if (!healthForm.fullName.trim() || !healthForm.mobile.trim()) {
+      setErrors({ healthRequired: "कृपया नाम और मोबाइल नंबर दर्ज करें" });
+      return;
+    }
 
-  const triggerCelebration = () => {
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    } catch (e) {}
-  };
+    setErrors({});
+    const appId = `RBJJT-HL-${Date.now().toString().slice(-6)}`;
+    const record = {
+      id: appId,
+      type: 'health',
+      typeName: 'स्वास्थ्य व विपश्यना शिविर',
+      name: healthForm.fullName,
+      phone: healthForm.mobile,
+      district: healthForm.district,
+      state: healthForm.state,
+      status: 'पंजीकृत (Registered)',
+      date: new Date().toLocaleDateString('hi-IN'),
+      details: `समस्या: ${healthForm.healthIssue}, शिविर: ${healthForm.campType}`
+    };
 
-  const handlePrintSlip = () => {
-    window.print();
+    saveRecord(record);
+    triggerCelebration();
+
+    setSubmissionSuccess({
+      id: appId,
+      title: "स्वास्थ्य एवं साधना शिविर पंजीकरण सफल!",
+      subtitle: "विपश्यना ध्यान साधना व प्राकृतिक चिकित्सा केंद्र (सारनाथ) में आपका स्वागत है।",
+      name: healthForm.fullName,
+      fatherName: healthForm.guardianName,
+      phone: healthForm.mobile,
+      district: healthForm.district,
+      state: healthForm.state,
+      role: healthForm.campType,
+      photo: "https://rbjjt.com/wp-content/uploads/2026/03/Swasthy-Rbjjt.png",
+      date: new Date().toLocaleDateString('hi-IN'),
+      type: "शिविर प्रवेश पर्ची (Health Entry Pass)"
+    });
   };
 
   return (
@@ -321,117 +393,165 @@ export function FormsSection({ onRecordAdded }) {
         <div className="section-header">
           <div className="badge-tag">
             <Sparkles size={14} />
-            <span>डिजिटल सेवा एवं ऑनलाइन पंजीकरण</span>
+            <span>डिजिटल सेवा एवं ऑनलाइन पंजीकरण पोर्टल</span>
           </div>
-          <h2 className="section-title">ट्रस्ट ऑनलाइन आवेदन केंद्र (Online Forms)</h2>
+          <h2 className="section-title">ट्रस्ट ऑनलाइन आवेदन केंद्र (Official Forms)</h2>
           <div className="title-ornament">
             <span className="dharma-wheel">☸</span>
           </div>
           <p className="section-subtitle">
-            धर्माधिकारी पद हेतु आवेदन, दहेज-मुक्त बौद्ध विवाह बायोडाटा, धम्म दीक्षा एवं विवाह प्रमाण-पत्र हेतु अधिकृत फॉर्म भरें।
+            धर्माधिकारी पद, दहेज-मुक्त बौद्ध विवाह, धम्म दीक्षा, विवाह प्रमाण-पत्र एवं विपश्यना स्वास्थ्य शिविर हेतु आधिकारिक फॉर्म भरें।
           </p>
         </div>
 
         {/* Form Card Container */}
         <div className="form-suite-card">
-          {/* Form Tabs Header */}
+          {/* Form Tabs Header with 5 Full Official Forms */}
           <div className="form-tabs-header">
             <button 
               className={`form-tab-btn ${activeTab === 'dhammadhikari' ? 'active' : ''}`}
               onClick={() => { setActiveTab('dhammadhikari'); setSubmissionSuccess(null); }}
             >
-              <UserCheck size={18} />
+              <UserCheck size={17} />
               <span>1. धर्माधिकारी आवेदन</span>
             </button>
             <button 
               className={`form-tab-btn ${activeTab === 'matrimonial' ? 'active' : ''}`}
               onClick={() => { setActiveTab('matrimonial'); setSubmissionSuccess(null); }}
             >
-              <Heart size={18} />
-              <span>2. आवाह-विवाह फार्म</span>
+              <Heart size={17} />
+              <span>2. आवाह-विवाह बायोडाटा</span>
             </button>
             <button 
               className={`form-tab-btn ${activeTab === 'diksha' ? 'active' : ''}`}
               onClick={() => { setActiveTab('diksha'); setSubmissionSuccess(null); }}
             >
-              <Award size={18} />
-              <span>3. दीक्षा आवेदन</span>
+              <Award size={17} />
+              <span>3. धम्म दीक्षा आवेदन</span>
             </button>
             <button 
               className={`form-tab-btn ${activeTab === 'marriageCert' ? 'active' : ''}`}
               onClick={() => { setActiveTab('marriageCert'); setSubmissionSuccess(null); }}
             >
-              <FileText size={18} />
+              <FileText size={17} />
               <span>4. विवाह प्रमाण-पत्र</span>
+            </button>
+            <button 
+              className={`form-tab-btn ${activeTab === 'healthCamp' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('healthCamp'); setSubmissionSuccess(null); }}
+            >
+              <Activity size={17} />
+              <span>5. स्वास्थ्य व विपश्यना शिविर</span>
             </button>
           </div>
 
           {/* Form Body */}
           <div className="form-body">
-            {/* SUCCESS SLIP VIEW */}
+            {/* SUCCESS SLIP / ID CARD VIEW */}
             {submissionSuccess ? (
-              <div className="submission-slip-card">
+              <div className="submission-slip-card" style={{ maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
                 <div style={{
-                  width: '64px',
-                  height: '64px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.6rem',
+                  borderBottom: '2px solid var(--color-gold)',
+                  paddingBottom: '1rem',
+                  marginBottom: '1.25rem'
+                }}>
+                  <img src="https://rbjjt.com/wp-content/uploads/2025/12/RBJJT-Official-Logo-70x62.png" alt="Logo" style={{ width: '42px', height: '42px' }} />
+                  <div>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)', fontSize: '1.25rem', margin: 0 }}>
+                      राष्ट्रीय बौद्ध जन जागरण ट्रस्ट
+                    </h3>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--color-gold-dark)', fontWeight: 700 }}>
+                      Reg. No. 069/16 | केंद्रीय कार्यालय: सारनाथ, वाराणसी
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{
+                  width: '56px',
+                  height: '56px',
                   borderRadius: 'var(--radius-full)',
                   backgroundColor: 'var(--color-success-bg)',
                   color: 'var(--color-success)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  margin: '0 auto 1.25rem auto'
+                  margin: '0 auto 0.75rem auto'
                 }}>
-                  <CheckCircle2 size={36} />
+                  <CheckCircle2 size={32} />
                 </div>
 
-                <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--color-gold-dark)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--color-gold-dark)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   {submissionSuccess.type}
                 </span>
 
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', color: 'var(--color-primary)', margin: '0.5rem 0' }}>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.45rem', color: 'var(--color-primary)', margin: '0.35rem 0' }}>
                   {submissionSuccess.title}
                 </h3>
-                <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
+                <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.25rem', fontSize: '0.92rem' }}>
                   {submissionSuccess.subtitle}
                 </p>
 
                 {/* Slip Details Box */}
                 <div style={{
                   background: 'var(--color-bg)',
-                  border: '1px solid var(--color-border)',
+                  border: '1.5px solid var(--color-border)',
                   borderRadius: 'var(--radius-md)',
-                  padding: '1.5rem',
-                  maxWidth: '500px',
-                  margin: '0 auto 2rem auto',
+                  padding: '1.25rem 1.5rem',
+                  margin: '0 auto 1.5rem auto',
                   textAlign: 'left'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.6rem', borderBottom: '1px solid var(--color-border)' }}>
-                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>आवेदन संख्या (App ID):</span>
-                    <strong style={{ color: 'var(--color-primary)' }}>{submissionSuccess.id}</strong>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '0.65rem', borderBottom: '1px solid var(--color-border)' }}>
+                    <div>
+                      <span style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>पंजीकरण क्रमांक (ID):</span>
+                      <strong style={{ color: 'var(--color-primary)', display: 'block', fontSize: '1.05rem' }}>{submissionSuccess.id}</strong>
+                    </div>
+                    {submissionSuccess.photo && (
+                      <img 
+                        src={submissionSuccess.photo} 
+                        alt="Applicant Photo" 
+                        style={{ width: '56px', height: '64px', objectFit: 'cover', borderRadius: '4px', border: '1.5px solid var(--color-gold)' }} 
+                      />
+                    )}
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 0', borderBottom: '1px solid var(--color-border)' }}>
-                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>आवेदक का नाम:</span>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid var(--color-border)' }}>
+                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem' }}>आवेदक का नाम:</span>
                     <strong>{submissionSuccess.name}</strong>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 0', borderBottom: '1px solid var(--color-border)' }}>
-                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>पिता / अभिभावक:</span>
-                    <span>{submissionSuccess.fatherName}</span>
+
+                  {submissionSuccess.fatherName && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid var(--color-border)' }}>
+                      <span style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem' }}>पिता / अभिभावक:</span>
+                      <span>{submissionSuccess.fatherName}</span>
+                    </div>
+                  )}
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid var(--color-border)' }}>
+                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem' }}>स्थान व जनपद:</span>
+                    <span>{submissionSuccess.district}, {submissionSuccess.state}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 0', borderBottom: '1px solid var(--color-border)' }}>
-                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>पंजीकरण तिथि:</span>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid var(--color-border)' }}>
+                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem' }}>पंजीकरण तिथि:</span>
                     <span>{submissionSuccess.date}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.6rem' }}>
-                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>मुख्यालय:</span>
-                    <span style={{ color: 'var(--color-gold-dark)', fontWeight: 700 }}>सारनाथ, वाराणसी</span>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.65rem' }}>
+                    <span style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem' }}>सत्यापन स्थिति:</span>
+                    <span style={{ color: 'var(--color-success)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <ShieldCheck size={16} /> अधिकृत मान्य
+                    </span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <button onClick={handlePrintSlip} className="btn btn-primary">
+                <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <button onClick={() => window.print()} className="btn btn-primary">
                     <Printer size={18} />
-                    <span>प्रिंट / सेव करें (Print Slip)</span>
+                    <span>प्रिंट / PDF सेव करें</span>
                   </button>
                   <button 
                     onClick={() => setSubmissionSuccess(null)} 
@@ -451,6 +571,10 @@ export function FormsSection({ onRecordAdded }) {
                       <strong>धर्माधिकारी आवेदन निर्देश:</strong> तथागत बुद्ध द्वारा प्रतिपादित धर्म को गांव-गांव तक पहुँचाने हेतु इस फॉर्म को भरें। सफल पंजीकरण पर आपको अधिकृत पहचान व दायित्व सौंपा जाएगा।
                     </div>
 
+                    <h4 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)', fontSize: '1.1rem', margin: '1rem 0 0.85rem 0' }}>
+                      भाग 1: व्यक्तिगत विवरण (Personal Details)
+                    </h4>
+
                     <div className="form-grid-2">
                       <div className="form-group">
                         <label className="form-label">आवेदक का पूरा नाम <span className="required">*</span></label>
@@ -458,24 +582,24 @@ export function FormsSection({ onRecordAdded }) {
                           type="text" 
                           name="fullName"
                           className="form-input" 
-                          placeholder="उदा. राहुल कुमार"
+                          placeholder="उदा. राहुल कुमार मौर्य"
                           value={dhammaForm.fullName}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, fullName: e.target.value })}
                         />
                         {errors.fullName && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.fullName}</span>}
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">पिता / अभिभावक का नाम <span className="required">*</span></label>
+                        <label className="form-label">पिता / पति का नाम <span className="required">*</span></label>
                         <input 
                           type="text" 
-                          name="fatherName"
+                          name="fatherHusbandName"
                           className="form-input" 
-                          placeholder="पिता का नाम"
-                          value={dhammaForm.fatherName}
-                          onChange={handleDhammaChange}
+                          placeholder="पिता अथवा पति का नाम"
+                          value={dhammaForm.fatherHusbandName}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, fatherHusbandName: e.target.value })}
                         />
-                        {errors.fatherName && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.fatherName}</span>}
+                        {errors.fatherHusbandName && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.fatherHusbandName}</span>}
                       </div>
                     </div>
 
@@ -487,7 +611,7 @@ export function FormsSection({ onRecordAdded }) {
                           name="dob"
                           className="form-input" 
                           value={dhammaForm.dob}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, dob: e.target.value })}
                         />
                       </div>
 
@@ -497,7 +621,7 @@ export function FormsSection({ onRecordAdded }) {
                           name="gender" 
                           className="form-select"
                           value={dhammaForm.gender}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, gender: e.target.value })}
                         >
                           <option>पुरुष (Male)</option>
                           <option>महिला (Female)</option>
@@ -506,41 +630,88 @@ export function FormsSection({ onRecordAdded }) {
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">शैक्षणिक योग्यता</label>
+                        <label className="form-label">रक्त समूह (Blood Group)</label>
+                        <select 
+                          name="bloodGroup" 
+                          className="form-select"
+                          value={dhammaForm.bloodGroup}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, bloodGroup: e.target.value })}
+                        >
+                          <option>A+</option>
+                          <option>B+</option>
+                          <option>O+</option>
+                          <option>AB+</option>
+                          <option>A-</option>
+                          <option>B-</option>
+                          <option>O-</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="form-grid-3">
+                      <div className="form-group">
+                        <label className="form-label">पहचान पत्र प्रकार</label>
+                        <select 
+                          name="idType" 
+                          className="form-select"
+                          value={dhammaForm.idType}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, idType: e.target.value })}
+                        >
+                          <option>आधार कार्ड (Aadhaar)</option>
+                          <option>वोटर पहचान पत्र (Voter ID)</option>
+                          <option>पैन कार्ड (PAN Card)</option>
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">पहचान पत्र क्रमांक</label>
                         <input 
                           type="text" 
-                          name="qualification"
                           className="form-input" 
-                          placeholder="उदा. 12वीं / स्नातक / परास्नातक"
-                          value={dhammaForm.qualification}
-                          onChange={handleDhammaChange}
+                          placeholder="उदा. 1234 5678 9012"
+                          value={dhammaForm.idNumber}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, idNumber: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">पासपोर्ट फोटो अपलोड</label>
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          className="form-input" 
+                          style={{ padding: '0.45rem' }}
+                          onChange={(e) => handlePhotoUpload(e, 'dhamma')}
                         />
                       </div>
                     </div>
+
+                    {/* Address & Contact Section */}
+                    <h4 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)', fontSize: '1.1rem', margin: '1.5rem 0 0.85rem 0' }}>
+                      भाग 2: संपर्क एवं निवास पता (Address & Contact)
+                    </h4>
 
                     <div className="form-grid-2">
                       <div className="form-group">
                         <label className="form-label">मोबाइल नंबर <span className="required">*</span></label>
                         <input 
                           type="tel" 
-                          name="mobile"
                           className="form-input" 
                           placeholder="10 अंकों का फोन नंबर"
                           value={dhammaForm.mobile}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, mobile: e.target.value })}
                         />
                         {errors.mobile && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.mobile}</span>}
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">व्हाट्सएप नंबर (यदि अलग हो)</label>
+                        <label className="form-label">व्हाट्सएप नंबर</label>
                         <input 
                           type="tel" 
-                          name="whatsapp"
                           className="form-input" 
                           placeholder="व्हाट्सएप नंबर"
                           value={dhammaForm.whatsapp}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, whatsapp: e.target.value })}
                         />
                       </div>
                     </div>
@@ -550,23 +721,21 @@ export function FormsSection({ onRecordAdded }) {
                         <label className="form-label">ग्राम / मोहल्ला</label>
                         <input 
                           type="text" 
-                          name="village"
                           className="form-input" 
                           placeholder="ग्राम"
                           value={dhammaForm.village}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, village: e.target.value })}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">ब्लॉक (प्रखंड)</label>
+                        <label className="form-label">ब्लॉक / तहसील</label>
                         <input 
                           type="text" 
-                          name="block"
                           className="form-input" 
                           placeholder="ब्लॉक"
                           value={dhammaForm.block}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, block: e.target.value })}
                         />
                       </div>
 
@@ -574,39 +743,63 @@ export function FormsSection({ onRecordAdded }) {
                         <label className="form-label">जनपद / जिला <span className="required">*</span></label>
                         <input 
                           type="text" 
-                          name="district"
                           className="form-input" 
-                          placeholder="उदा. वाराणसी / भदोही / सोनभद्र"
+                          placeholder="उदा. सारनाथ / वाराणसी / भदोही"
                           value={dhammaForm.district}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, district: e.target.value })}
                         />
                         {errors.district && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.district}</span>}
                       </div>
                     </div>
 
+                    {/* Role & Qualification */}
+                    <div className="form-grid-2">
+                      <div className="form-group">
+                        <label className="form-label">प्रस्तावित पद / दायित्व</label>
+                        <select 
+                          className="form-select"
+                          value={dhammaForm.proposedRole}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, proposedRole: e.target.value })}
+                        >
+                          <option>ग्राम धर्माधिकारी (Village In-charge)</option>
+                          <option>5 ग्राम सभा केंद्र प्रमुख (Cluster Head)</option>
+                          <option>ब्लॉक धर्म परिचायक (Block Coordinator)</option>
+                          <option>जिला धम्म प्रचारक (District Representative)</option>
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">उच्चतम योग्यता</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="उदा. इंटर / स्नातक / परास्नातक"
+                          value={dhammaForm.qualification}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, qualification: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
                     {/* Pledge Checkbox */}
-                    <div style={{ margin: '1.5rem 0', padding: '1rem', background: 'var(--color-bg-alt)', borderRadius: 'var(--radius-md)' }}>
+                    <div style={{ margin: '1.25rem 0', padding: '1rem', background: 'var(--color-bg-alt)', borderRadius: 'var(--radius-md)' }}>
                       <label className="form-checkbox-label">
                         <input 
                           type="checkbox" 
-                          name="pledgeAccepted"
                           className="form-checkbox"
                           checked={dhammaForm.pledgeAccepted}
-                          onChange={handleDhammaChange}
+                          onChange={(e) => setDhammaForm({ ...dhammaForm, pledgeAccepted: e.target.checked })}
                         />
                         <span>
-                          <strong>प्रतिज्ञा पत्र:</strong> मैं सत्यनिष्ठा से प्रतिज्ञा करता/करती हूँ कि मैं तथागत बुद्ध के कल्याणकारी सनातन धर्म, शील, समाधि, प्रज्ञा का आचरण करूँगा और राष्ट्रीय बौद्ध जन जागरण ट्रस्ट के संविधान व नियमों का निष्ठापूर्वक पालन करूँगा। <span className="required">*</span>
+                          <strong>सत्यनिष्ठा प्रतिज्ञा पत्र:</strong> मैं प्रमाणित करता/करती हूँ कि दी गई सभी जानकारियाँ सत्य हैं। मैं तथागत बुद्ध के त्रिरत्न एवं पंचशील का आचरण करते हुए समाज को शील, समाधि, प्रज्ञा से प्रकाशित करने हेतु निष्काम भाव से कार्य करूँगा/करूँगी। <span className="required">*</span>
                         </span>
                       </label>
-                      {errors.pledgeAccepted && <p style={{ color: 'var(--color-error)', fontSize: '0.82rem', marginTop: '0.4rem' }}>{errors.pledgeAccepted}</p>}
+                      {errors.pledgeAccepted && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', display: 'block', marginTop: '0.3rem' }}>{errors.pledgeAccepted}</span>}
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                      <button type="submit" className="btn btn-primary btn-lg">
-                        <UserCheck size={20} />
-                        <span>धर्माधिकारी आवेदन सबमिट करें</span>
-                      </button>
-                    </div>
+                    <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
+                      <UserCheck size={18} />
+                      <span>धर्माधिकारी पद हेतु आवेदन पत्र जमा करें</span>
+                    </button>
                   </form>
                 )}
 
@@ -614,20 +807,19 @@ export function FormsSection({ onRecordAdded }) {
                 {activeTab === 'matrimonial' && (
                   <form onSubmit={handleMatriSubmit}>
                     <div className="form-instructions">
-                      <strong>आवाह-विवाह हेतु बायोडाटा पंजीकरण:</strong> ट्रस्ट द्वारा दहेज-मुक्त, सादगीपूर्ण एवं सम्मानजनक बौद्ध विवाह संबंधों को सुगम बनाने हेतु यह मंच संचालित किया जाता है।
+                      <strong>दहेज-मुक्त बौद्ध वैवाहिक पंजीकरण:</strong> ट्रस्ट द्वारा संचालित विवाह संस्कार योजना में प्रत्याशी का बायोडाटा पंजीकृत करें।
                     </div>
 
-                    <div className="form-grid-3">
+                    <div className="form-grid-2">
                       <div className="form-group">
-                        <label className="form-label">प्रत्याशी प्रकार</label>
+                        <label className="form-label">प्रत्याशी का प्रकार <span className="required">*</span></label>
                         <select 
-                          name="candidateType" 
                           className="form-select"
                           value={matriForm.candidateType}
-                          onChange={handleMatriChange}
+                          onChange={(e) => setMatriForm({ ...matriForm, candidateType: e.target.value })}
                         >
-                          <option>वर (Groom)</option>
-                          <option>वधू (Bride)</option>
+                          <option>वर (Groom - लड़का)</option>
+                          <option>वधू (Bride - लड़की)</option>
                         </select>
                       </div>
 
@@ -635,126 +827,119 @@ export function FormsSection({ onRecordAdded }) {
                         <label className="form-label">प्रत्याशी का पूरा नाम <span className="required">*</span></label>
                         <input 
                           type="text" 
-                          name="fullName"
                           className="form-input" 
-                          placeholder="नाम"
+                          placeholder="प्रत्याशी का नाम"
                           value={matriForm.fullName}
-                          onChange={handleMatriChange}
+                          onChange={(e) => setMatriForm({ ...matriForm, fullName: e.target.value })}
                         />
                         {errors.matriName && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.matriName}</span>}
                       </div>
+                    </div>
+
+                    <div className="form-grid-3">
+                      <div className="form-group">
+                        <label className="form-label">पिता का नाम</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="पिता का नाम"
+                          value={matriForm.fatherName}
+                          onChange={(e) => setMatriForm({ ...matriForm, fatherName: e.target.value })}
+                        />
+                      </div>
 
                       <div className="form-group">
-                        <label className="form-label">जन्म तिथि</label>
+                        <label className="form-label">कद / ऊंचाई (Height)</label>
                         <input 
-                          type="date" 
-                          name="dob"
+                          type="text" 
                           className="form-input" 
-                          value={matriForm.dob}
-                          onChange={handleMatriChange}
+                          placeholder="उदा. 5 फीट 7 इंच"
+                          value={matriForm.height}
+                          onChange={(e) => setMatriForm({ ...matriForm, height: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">शैक्षणिक योग्यता</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="उदा. बी.टेक / बी.ए. / एम.ए."
+                          value={matriForm.education}
+                          onChange={(e) => setMatriForm({ ...matriForm, education: e.target.value })}
                         />
                       </div>
                     </div>
 
                     <div className="form-grid-2">
                       <div className="form-group">
-                        <label className="form-label">पिता का नाम</label>
+                        <label className="form-label">पेशा / व्यवसाय (Job/Occupation)</label>
                         <input 
                           type="text" 
-                          name="fatherName"
                           className="form-input" 
-                          placeholder="पिता का नाम"
-                          value={matriForm.fatherName}
-                          onChange={handleMatriChange}
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="form-label">माता का नाम</label>
-                        <input 
-                          type="text" 
-                          name="motherName"
-                          className="form-input" 
-                          placeholder="माता का नाम"
-                          value={matriForm.motherName}
-                          onChange={handleMatriChange}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-grid-3">
-                      <div className="form-group">
-                        <label className="form-label">शैक्षणिक योग्यता</label>
-                        <input 
-                          type="text" 
-                          name="education"
-                          className="form-input" 
-                          placeholder="उदा. B.Tech / B.A. / B.Ed"
-                          value={matriForm.education}
-                          onChange={handleMatriChange}
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="form-label">व्यवसाय / पद</label>
-                        <input 
-                          type="text" 
-                          name="occupation"
-                          className="form-input" 
-                          placeholder="उदा. शिक्षक / प्राइवेट सर्विस / व्यापार"
+                          placeholder="उदा. सरकारी सेवा / प्राइवेट / व्यवसाय"
                           value={matriForm.occupation}
-                          onChange={handleMatriChange}
+                          onChange={(e) => setMatriForm({ ...matriForm, occupation: e.target.value })}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">संपर्क फोन नंबर <span className="required">*</span></label>
+                        <label className="form-label">अभिभावक का फोन नंबर <span className="required">*</span></label>
                         <input 
                           type="tel" 
-                          name="mobile"
                           className="form-input" 
                           placeholder="फोन नंबर"
-                          value={matriForm.mobile}
-                          onChange={handleMatriChange}
+                          value={matriForm.guardianMobile}
+                          onChange={(e) => setMatriForm({ ...matriForm, guardianMobile: e.target.value })}
                         />
-                        {errors.matriMobile && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.matriMobile}</span>}
+                        {errors.guardianMobile && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.guardianMobile}</span>}
                       </div>
                     </div>
 
-                    <div className="form-group">
-                      <label className="form-label">गृह जनपद / शहर</label>
-                      <input 
-                        type="text" 
-                        name="district"
-                        className="form-input" 
-                        placeholder="जिला एवं राज्य"
-                        value={matriForm.district}
-                        onChange={handleMatriChange}
-                      />
+                    <div className="form-grid-2">
+                      <div className="form-group">
+                        <label className="form-label">स्थायी जिला व राज्य</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="उदा. वाराणसी, उत्तर प्रदेश"
+                          value={matriForm.district}
+                          onChange={(e) => setMatriForm({ ...matriForm, district: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">प्रत्याशी का फोटो अपलोड</label>
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          className="form-input" 
+                          style={{ padding: '0.45rem' }}
+                          onChange={(e) => handlePhotoUpload(e, 'matri')}
+                        />
+                      </div>
                     </div>
 
-                    <div style={{ margin: '1.5rem 0', padding: '1rem', background: 'var(--color-bg-alt)', borderRadius: 'var(--radius-md)' }}>
+                    {/* Dowry-Free Pledge */}
+                    <div style={{ margin: '1.25rem 0', padding: '1rem', background: 'var(--color-bg-alt)', borderRadius: 'var(--radius-md)' }}>
                       <label className="form-checkbox-label">
                         <input 
                           type="checkbox" 
-                          name="dowryFreePledge"
                           className="form-checkbox"
                           checked={matriForm.dowryFreePledge}
-                          onChange={handleMatriChange}
+                          onChange={(e) => setMatriForm({ ...matriForm, dowryFreePledge: e.target.checked })}
                         />
                         <span>
                           <strong>दहेज-मुक्त संकल्प:</strong> हम दहेज प्रथा के सख्त विरोधी हैं और भगवान बुद्ध व बाबासाहब डॉ. आम्बेडकर के विचारों के अनुरूप सादगीपूर्ण संस्कार से विवाह करने का संकल्प लेते हैं। <span className="required">*</span>
                         </span>
                       </label>
-                      {errors.dowryFreePledge && <p style={{ color: 'var(--color-error)', fontSize: '0.82rem', marginTop: '0.4rem' }}>{errors.dowryFreePledge}</p>}
+                      {errors.dowryFreePledge && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', display: 'block', marginTop: '0.3rem' }}>{errors.dowryFreePledge}</span>}
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      <button type="submit" className="btn btn-gold btn-lg">
-                        <Heart size={20} fill="#FFF" />
-                        <span>वैवाहिक बायोडाटा दर्ज करें</span>
-                      </button>
-                    </div>
+                    <button type="submit" className="btn btn-gold btn-lg" style={{ width: '100%' }}>
+                      <Heart size={18} fill="#FFF" />
+                      <span>बायोडाटा सुरक्षित रूप से पंजीकृत करें</span>
+                    </button>
                   </form>
                 )}
 
@@ -762,19 +947,18 @@ export function FormsSection({ onRecordAdded }) {
                 {activeTab === 'diksha' && (
                   <form onSubmit={handleDikshaSubmit}>
                     <div className="form-instructions">
-                      <strong>दीक्षा आवेदन-पत्र:</strong> भगवान बुद्ध के त्रिरत्न (बुद्ध, धम्म, संघ) और पंचशील की पवित्र दीक्षा प्राप्त करने हेतु इस फॉर्म को भरें।
+                      <strong>धम्म दीक्षा आवेदन:</strong> पंचशील, त्रिशरण व बाबासाहब की 22 प्रतिज्ञाओं के साथ प्रबुद्ध बौद्ध जीवन शैली अपनाने हेतु पंजीकरण।
                     </div>
 
                     <div className="form-grid-2">
                       <div className="form-group">
-                        <label className="form-label">आवेदक का नाम <span className="required">*</span></label>
+                        <label className="form-label">प्रार्थी का पूरा नाम <span className="required">*</span></label>
                         <input 
                           type="text" 
-                          name="fullName"
                           className="form-input" 
-                          placeholder="नाम"
+                          placeholder="आवेदक का नाम"
                           value={dikshaForm.fullName}
-                          onChange={handleDikshaChange}
+                          onChange={(e) => setDikshaForm({ ...dikshaForm, fullName: e.target.value })}
                         />
                         {errors.dikshaName && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.dikshaName}</span>}
                       </div>
@@ -783,78 +967,69 @@ export function FormsSection({ onRecordAdded }) {
                         <label className="form-label">पिता / पति का नाम</label>
                         <input 
                           type="text" 
-                          name="fatherHusbandName"
                           className="form-input" 
-                          placeholder="अभिभावक का नाम"
+                          placeholder="पिता/पति का नाम"
                           value={dikshaForm.fatherHusbandName}
-                          onChange={handleDikshaChange}
+                          onChange={(e) => setDikshaForm({ ...dikshaForm, fatherHusbandName: e.target.value })}
                         />
                       </div>
                     </div>
 
-                    <div className="form-grid-2">
+                    <div className="form-grid-3">
                       <div className="form-group">
-                        <label className="form-label">संपर्क फोन नंबर <span className="required">*</span></label>
+                        <label className="form-label">मोबाइल नंबर <span className="required">*</span></label>
                         <input 
                           type="tel" 
-                          name="mobile"
                           className="form-input" 
-                          placeholder="मोबाइल नंबर"
+                          placeholder="फोन नंबर"
                           value={dikshaForm.mobile}
-                          onChange={handleDikshaChange}
+                          onChange={(e) => setDikshaForm({ ...dikshaForm, mobile: e.target.value })}
                         />
                         {errors.dikshaMobile && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.dikshaMobile}</span>}
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">दीक्षा हेतु पसंदीदा केंद्र</label>
+                        <label className="form-label">दीक्षा का प्रकार</label>
                         <select 
-                          name="preferredLocation" 
+                          className="form-select"
+                          value={dikshaForm.dikshaType}
+                          onChange={(e) => setDikshaForm({ ...dikshaForm, dikshaType: e.target.value })}
+                        >
+                          <option>व्यक्तिगत दीक्षा (Individual)</option>
+                          <option>सपरिवार सामूहिक दीक्षा (Whole Family)</option>
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">दीक्षा स्थल प्राथमिकता</label>
+                        <select 
                           className="form-select"
                           value={dikshaForm.preferredLocation}
-                          onChange={handleDikshaChange}
+                          onChange={(e) => setDikshaForm({ ...dikshaForm, preferredLocation: e.target.value })}
                         >
-                          <option>सारनाथ, वाराणसी (Sarnath Center)</option>
-                          <option>भदोही धम्म केंद्र</option>
-                          <option>सोनभद्र धम्म केंद्र</option>
-                          <option>ग्राम सभा शिविर</option>
+                          <option>ऋषिपत्तन, सारनाथ (वाराणसी)</option>
+                          <option>महाबोधि मंदिर, बोधगया</option>
+                          <option>स्थानीय जिला/ब्लॉक बुद्ध विहार</option>
+                          <option>अपने गृह स्थान पर</option>
                         </select>
                       </div>
                     </div>
 
                     <div className="form-group">
-                      <label className="form-label">पूरा पता</label>
-                      <textarea 
-                        name="address"
-                        className="form-textarea"
-                        placeholder="ग्राम, पोस्ट, ब्लॉक, जिला एवं पिनकोड"
+                      <label className="form-label">स्थायी पता व जिला</label>
+                      <input 
+                        type="text" 
+                        className="form-input" 
+                        placeholder="ग्राम, पोस्ट, जिला, राज्य"
                         value={dikshaForm.address}
-                        onChange={handleDikshaChange}
-                      ></textarea>
+                        onChange={(e) => setDikshaForm({ ...dikshaForm, address: e.target.value })}
+                      />
                     </div>
 
-                    <div style={{ margin: '1.5rem 0', padding: '1rem', background: 'var(--color-bg-alt)', borderRadius: 'var(--radius-md)' }}>
-                      <label className="form-checkbox-label">
-                        <input 
-                          type="checkbox" 
-                          name="panchsheelPledge"
-                          className="form-checkbox"
-                          checked={dikshaForm.panchsheelPledge}
-                          onChange={handleDikshaChange}
-                        />
-                        <span>
-                          <strong>पंचशील संकल्प:</strong> मैं हिंसा, चोरी, व्यभिचार, असत्य भाषण और मादक पदार्थों के सेवन से विरत रहने का संकल्प लेता/लेती हूँ। <span className="required">*</span>
-                        </span>
-                      </label>
-                      {errors.panchsheelPledge && <p style={{ color: 'var(--color-error)', fontSize: '0.82rem', marginTop: '0.4rem' }}>{errors.panchsheelPledge}</p>}
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      <button type="submit" className="btn btn-primary btn-lg">
-                        <Award size={20} />
-                        <span>दीक्षा आवेदन सबमिट करें</span>
-                      </button>
-                    </div>
+                    <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: '0.5rem' }}>
+                      <Award size={18} />
+                      <span>दीक्षा आवेदन पत्र जमा करें</span>
+                    </button>
                   </form>
                 )}
 
@@ -862,133 +1037,179 @@ export function FormsSection({ onRecordAdded }) {
                 {activeTab === 'marriageCert' && (
                   <form onSubmit={handleCertSubmit}>
                     <div className="form-instructions">
-                      <strong>विवाह प्रमाण-पत्र आवेदन:</strong> जिन बौद्ध दम्पतियों का विवाह संस्कार बौद्ध रीति-रिवाज से संपन्न हुआ है, वे ट्रस्ट द्वारा अधिकृत विवाह प्रमाण-पत्र हेतु यहाँ आवेदन करें।
+                      <strong>बौद्ध विवाह प्रमाण-पत्र जारी करने हेतु आवेदन:</strong> ट्रस्ट द्वारा अधिकृत पंजीयन क्रमांक एवं प्रमाण-पत्र जारी किया जाएगा।
                     </div>
 
+                    <h4 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)', fontSize: '1.05rem', margin: '0.5rem 0' }}>
+                      वर (Groom) का विवरण:
+                    </h4>
                     <div className="form-grid-2">
                       <div className="form-group">
-                        <label className="form-label">वर (Groom) का पूरा नाम <span className="required">*</span></label>
+                        <label className="form-label">वर का नाम <span className="required">*</span></label>
                         <input 
                           type="text" 
-                          name="groomName"
                           className="form-input" 
                           placeholder="वर का नाम"
                           value={certForm.groomName}
-                          onChange={handleCertChange}
+                          onChange={(e) => setCertForm({ ...certForm, groomName: e.target.value })}
                         />
                       </div>
-
                       <div className="form-group">
                         <label className="form-label">वर के पिता का नाम</label>
                         <input 
                           type="text" 
-                          name="groomFather"
                           className="form-input" 
-                          placeholder="वर पिता"
+                          placeholder="वर के पिता का नाम"
                           value={certForm.groomFather}
-                          onChange={handleCertChange}
+                          onChange={(e) => setCertForm({ ...certForm, groomFather: e.target.value })}
                         />
                       </div>
                     </div>
 
+                    <h4 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)', fontSize: '1.05rem', margin: '0.5rem 0' }}>
+                      वधू (Bride) का विवरण:
+                    </h4>
                     <div className="form-grid-2">
                       <div className="form-group">
-                        <label className="form-label">वधू (Bride) का पूरा नाम <span className="required">*</span></label>
+                        <label className="form-label">वधू का नाम <span className="required">*</span></label>
                         <input 
                           type="text" 
-                          name="brideName"
                           className="form-input" 
                           placeholder="वधू का नाम"
                           value={certForm.brideName}
-                          onChange={handleCertChange}
+                          onChange={(e) => setCertForm({ ...certForm, brideName: e.target.value })}
                         />
                       </div>
-
                       <div className="form-group">
                         <label className="form-label">वधू के पिता का नाम</label>
                         <input 
                           type="text" 
-                          name="brideFather"
                           className="form-input" 
-                          placeholder="वधू पिता"
+                          placeholder="वधू के पिता का नाम"
                           value={certForm.brideFather}
-                          onChange={handleCertChange}
+                          onChange={(e) => setCertForm({ ...certForm, brideFather: e.target.value })}
                         />
                       </div>
                     </div>
 
-                    {errors.certNames && <p style={{ color: 'var(--color-error)', fontSize: '0.85rem', marginBottom: '1rem' }}>{errors.certNames}</p>}
-
                     <div className="form-grid-3">
                       <div className="form-group">
-                        <label className="form-label">विवाह संपन्न होने की तिथि</label>
+                        <label className="form-label">विवाह तिथि <span className="required">*</span></label>
                         <input 
                           type="date" 
-                          name="marriageDate"
                           className="form-input" 
                           value={certForm.marriageDate}
-                          onChange={handleCertChange}
+                          onChange={(e) => setCertForm({ ...certForm, marriageDate: e.target.value })}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">विवाह स्थल / स्थान</label>
+                        <label className="form-label">विवाह स्थल / विहार</label>
                         <input 
                           type="text" 
-                          name="marriagePlace"
                           className="form-input" 
-                          placeholder="विहार / गृह स्थल"
+                          placeholder="विहार अथवा स्थान का नाम"
                           value={certForm.marriagePlace}
-                          onChange={handleCertChange}
+                          onChange={(e) => setCertForm({ ...certForm, marriagePlace: e.target.value })}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">संपर्क मोबाइल नंबर <span className="required">*</span></label>
+                        <label className="form-label">वर-वधू युगल फोटो</label>
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          className="form-input" 
+                          style={{ padding: '0.45rem' }}
+                          onChange={(e) => handlePhotoUpload(e, 'cert')}
+                        />
+                      </div>
+                    </div>
+
+                    <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: '0.5rem' }}>
+                      <FileText size={18} />
+                      <span>विवाह प्रमाण-पत्र आवेदन जमा करें</span>
+                    </button>
+                  </form>
+                )}
+
+                {/* 5. HEALTH & VIPASSANA CAMP FORM */}
+                {activeTab === 'healthCamp' && (
+                  <form onSubmit={handleHealthSubmit}>
+                    <div className="form-instructions">
+                      <strong>स्वास्थ्य एवं प्राकृतिक चिकित्सा / विपश्यना शिविर पंजीकरण:</strong> मानसिक शांति, तनावमुक्ति, योग व निरोगी जीवन हेतु।
+                    </div>
+
+                    <div className="form-grid-2">
+                      <div className="form-group">
+                        <label className="form-label">प्रार्थी का नाम <span className="required">*</span></label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="प्रार्थी का नाम"
+                          value={healthForm.fullName}
+                          onChange={(e) => setHealthForm({ ...healthForm, fullName: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">मोबाइल नंबर <span className="required">*</span></label>
                         <input 
                           type="tel" 
-                          name="contactMobile"
                           className="form-input" 
-                          placeholder="फोन नंबर"
-                          value={certForm.contactMobile}
-                          onChange={handleCertChange}
+                          placeholder="10 अंकों का फोन नंबर"
+                          value={healthForm.mobile}
+                          onChange={(e) => setHealthForm({ ...healthForm, mobile: e.target.value })}
                         />
-                        {errors.certMobile && <span style={{ color: 'var(--color-error)', fontSize: '0.8rem' }}>{errors.certMobile}</span>}
                       </div>
                     </div>
 
                     <div className="form-grid-2">
                       <div className="form-group">
-                        <label className="form-label">प्रथम साक्षी (Witness 1) का नाम</label>
-                        <input 
-                          type="text" 
-                          name="witnessName1"
-                          className="form-input" 
-                          placeholder="साक्षी 1"
-                          value={certForm.witnessName1}
-                          onChange={handleCertChange}
-                        />
+                        <label className="form-label">शिविर का प्रकार चुनें</label>
+                        <select 
+                          className="form-select"
+                          value={healthForm.campType}
+                          onChange={(e) => setHealthForm({ ...healthForm, campType: e.target.value })}
+                        >
+                          <option>10 दिवसीय विपश्यना ध्यान साधना शिविर (सारनाथ)</option>
+                          <option>3 दिवसीय प्राकृतिक चिकित्सा व योग शिविर</option>
+                          <option>नियमित योग एवं ध्यान केंद्र (साप्ताहिक)</option>
+                          <option>नशामुक्ति एवं मानसिक परामर्श</option>
+                        </select>
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">द्वितीय साक्षी (Witness 2) का नाम</label>
-                        <input 
-                          type="text" 
-                          name="witnessName2"
-                          className="form-input" 
-                          placeholder="साक्षी 2"
-                          value={certForm.witnessName2}
-                          onChange={handleCertChange}
-                        />
+                        <label className="form-label">स्वास्थ्य समस्या अथवा परामर्श विषय</label>
+                        <select 
+                          className="form-select"
+                          value={healthForm.healthIssue}
+                          onChange={(e) => setHealthForm({ ...healthForm, healthIssue: e.target.value })}
+                        >
+                          <option>मानसिक तनाव एवं अनिद्रा (Stress & Insomnia)</option>
+                          <option>उच्च रक्तचाप एवं मधुमेह (BP & Diabetes)</option>
+                          <option>जोड़ों का दर्द व गठिया (Joint & Arthritis Pain)</option>
+                          <option>पाचन व पेट संबंधी विकार</option>
+                          <option>सामान्य मानसिक शांति व ध्यान साधना</option>
+                        </select>
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
-                      <button type="submit" className="btn btn-primary btn-lg">
-                        <FileText size={20} />
-                        <span>विवाह प्रमाण-पत्र आवेदन जमा करें</span>
-                      </button>
+                    <div className="form-group">
+                      <label className="form-label">निवास पता व जिला</label>
+                      <input 
+                        type="text" 
+                        className="form-input" 
+                        placeholder="ग्राम/शहर, जिला, राज्य"
+                        value={healthForm.address}
+                        onChange={(e) => setHealthForm({ ...healthForm, address: e.target.value })}
+                      />
                     </div>
+
+                    <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: '0.5rem' }}>
+                      <Activity size={18} />
+                      <span>शिविर में स्थान आरक्षित करें</span>
+                    </button>
                   </form>
                 )}
               </>

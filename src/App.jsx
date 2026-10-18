@@ -15,12 +15,14 @@ import { Footer } from './components/Footer';
 import { DonationModal } from './components/DonationModal';
 import { AdminRecordsModal } from './components/AdminRecordsModal';
 import { AudioChantPlayer } from './components/AudioChantPlayer';
+import { VideoModal } from './components/VideoModal';
 import { INITIAL_RECORDS } from './data/trustData';
 
 export function App() {
   const [theme, setTheme] = useState('light');
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [recordCount, setRecordCount] = useState(INITIAL_RECORDS.length);
 
   // Initialize theme and records
@@ -63,6 +65,7 @@ export function App() {
         {/* 1. Hero Section */}
         <Hero 
           onOpenDonateModal={() => setIsDonateModalOpen(true)} 
+          onOpenVideoModal={() => setIsVideoModalOpen(true)}
         />
 
         {/* 2. Founder Section */}
@@ -116,7 +119,12 @@ export function App() {
         onClose={() => setIsAdminModalOpen(false)}
       />
 
-      {/* Meditative Ambient Chime Player */}
+      <VideoModal
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
+      />
+
+      {/* Meditative Ambient Chime Player & Floating Support Dock */}
       <AudioChantPlayer />
     </div>
   );

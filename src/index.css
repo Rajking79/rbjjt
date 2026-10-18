@@ -572,10 +572,16 @@ img {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 3.8vw, 3.2rem);
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.38;
   color: var(--color-text-main);
   margin-bottom: 1rem;
   letter-spacing: -0.5px;
+}
+
+.highlight-wrapper {
+  display: inline-block;
+  padding: 0.2rem 0;
+  overflow: visible;
 }
 
 .hero-title .highlight {
@@ -658,11 +664,14 @@ img {
   box-shadow: var(--shadow-lg);
   border: 4px solid var(--color-surface);
   width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 .hero-main-img {
   width: 100%;
-  aspect-ratio: 4/4.5;
+  max-height: 400px;
+  aspect-ratio: 4/3.8;
   object-fit: cover;
   display: block;
   transition: transform var(--transition-slow);
@@ -753,10 +762,10 @@ img {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  padding: 2.25rem;
+  padding: 2rem 2.25rem;
   display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 2.25rem;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
   align-items: center;
   box-shadow: var(--shadow-md);
   position: relative;
@@ -785,12 +794,16 @@ img {
   overflow: hidden;
   border: 3px solid var(--color-border-light);
   box-shadow: var(--shadow-sm);
+  max-width: 260px;
+  margin: 0 auto;
 }
 
 .founder-img-frame img {
   width: 100%;
-  aspect-ratio: 3/4;
+  max-height: 320px;
+  aspect-ratio: 3/3.8;
   object-fit: cover;
+  display: block;
   transition: transform var(--transition-slow);
 }
 
@@ -1907,21 +1920,37 @@ img {
 .typewriter-container {
   display: inline-flex;
   align-items: center;
-  background: linear-gradient(135deg, rgba(122, 20, 20, 0.08), rgba(217, 119, 6, 0.15));
-  border: 1.5px solid rgba(217, 119, 6, 0.35);
+  background: linear-gradient(135deg, rgba(122, 20, 20, 0.08), rgba(217, 119, 6, 0.16));
+  border: 1.5px solid rgba(217, 119, 6, 0.4);
   border-radius: var(--radius-md);
-  padding: 0.1rem 0.65rem;
-  box-shadow: 0 2px 8px var(--color-gold-glow);
+  padding: 0.35rem 0.95rem;
+  box-shadow: 0 2px 12px var(--color-gold-glow);
   white-space: nowrap;
-  min-height: 1.3em;
+  min-height: 1.45em;
+  overflow: visible;
+  vertical-align: middle;
 }
 
 .typewriter-text {
+  display: inline-block;
   color: var(--color-primary);
   background: linear-gradient(135deg, #7A1414, #D97706);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800;
+  line-height: 1.45;
+  padding: 0.15rem 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.typewriter-text.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.typewriter-text.fade-out {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 
 [data-theme="dark"] .typewriter-text {
@@ -1934,13 +1963,14 @@ img {
   display: inline-block;
   color: var(--color-gold);
   font-weight: 900;
-  margin-left: 2px;
+  margin-left: 6px;
   animation: blinkCursor 0.75s infinite step-start;
+  font-size: 0.9em;
 }
 
 @keyframes blinkCursor {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.9); }
 }
 
 /* =========================================================
@@ -2056,5 +2086,45 @@ img {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.75rem;
   align-items: center;
+}
+
+/* =========================================================
+   Floating Right-Hand Action Dock & Slip Print Styles
+   ========================================================= */
+.floating-actions-dock {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 990;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.25));
+}
+
+@media print {
+  header,
+  footer,
+  .floating-actions-dock,
+  .marquee-ticker-wrap,
+  .nav-links,
+  .form-nav-tabs,
+  button {
+    display: none !important;
+  }
+
+  body {
+    background: #FFF !important;
+    color: #000 !important;
+  }
+
+  .trust-slip-container {
+    box-shadow: none !important;
+    border: 2px solid #5C0E0E !important;
+    page-break-inside: avoid;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
 }
 
