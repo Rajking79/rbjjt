@@ -12,6 +12,22 @@ export function Hero({ onOpenDonateModal, onOpenVideoModal }) {
     "शील व सदाचार दीक्षा"
   ];
 
+  const scrollToSection = (e, href) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        const navHeight = 80;
+        const targetTop = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({
+          top: targetTop,
+          behavior: 'smooth'
+        });
+        window.history.pushState(null, '', href);
+      }
+    }
+  };
+
   return (
     <section id="home" className="hero-section">
       <div className="container">
@@ -52,7 +68,11 @@ export function Hero({ onOpenDonateModal, onOpenVideoModal }) {
                 <span>पुण्य लाभ लें (दान करें)</span>
               </button>
 
-              <a href="#forms" className="btn btn-primary btn-lg">
+              <a 
+                href="#forms" 
+                onClick={(e) => scrollToSection(e, '#forms')}
+                className="btn btn-primary btn-lg"
+              >
                 <UserPlus size={18} />
                 <span>ऑनलाइन फॉर्म्स</span>
               </a>
@@ -68,7 +88,11 @@ export function Hero({ onOpenDonateModal, onOpenVideoModal }) {
                 </button>
               )}
 
-              <a href="#pillars" className="btn btn-outline btn-lg">
+              <a 
+                href="#pillars" 
+                onClick={(e) => scrollToSection(e, '#pillars')}
+                className="btn btn-outline btn-lg"
+              >
                 <BookOpen size={17} />
                 <span>5 मुख्य आधार</span>
               </a>

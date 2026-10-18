@@ -10,6 +10,22 @@ export function Footer({ onOpenDonateModal, onOpenAdminModal }) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const scrollToSection = (e, href) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        const navHeight = 80;
+        const targetTop = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({
+          top: targetTop,
+          behavior: 'smooth'
+        });
+        window.history.pushState(null, '', href);
+      }
+    }
+  };
+
   return (
     <footer className="site-footer">
       <div className="container">
@@ -54,13 +70,13 @@ export function Footer({ onOpenDonateModal, onOpenAdminModal }) {
           <div className="footer-links-col">
             <h4>मुख्य पृष्ठ व अनुभाग</h4>
             <ul className="footer-links-list">
-              <li><a href="#home">मुख्य पृष्ठ (Home)</a></li>
-              <li><a href="#about">हमारे बारे में (About Us)</a></li>
-              <li><a href="#founder">संस्थापक भिक्खु बुद्ध ज्योति</a></li>
-              <li><a href="#pillars">5 मुख्य आधार स्तंभ</a></li>
-              <li><a href="#roadmap">5-स्तरीय कार्य योजना</a></li>
-              <li><a href="#dhammadhikari">धर्माधिकारी पदाधिकारी</a></li>
-              <li><a href="#gallery">चित्र दीर्घा (Gallery)</a></li>
+              <li><a href="#home" onClick={(e) => scrollToSection(e, '#home')}>मुख्य पृष्ठ (Home)</a></li>
+              <li><a href="#about" onClick={(e) => scrollToSection(e, '#about')}>हमारे बारे में (About Us)</a></li>
+              <li><a href="#founder" onClick={(e) => scrollToSection(e, '#founder')}>संस्थापक भिक्खु बुद्ध ज्योति</a></li>
+              <li><a href="#pillars" onClick={(e) => scrollToSection(e, '#pillars')}>5 मुख्य आधार स्तंभ</a></li>
+              <li><a href="#roadmap" onClick={(e) => scrollToSection(e, '#roadmap')}>5-स्तरीय कार्य योजना</a></li>
+              <li><a href="#dhammadhikari" onClick={(e) => scrollToSection(e, '#dhammadhikari')}>धर्माधिकारी पदाधिकारी</a></li>
+              <li><a href="#gallery" onClick={(e) => scrollToSection(e, '#gallery')}>चित्र दीर्घा (Gallery)</a></li>
             </ul>
           </div>
 
@@ -68,10 +84,10 @@ export function Footer({ onOpenDonateModal, onOpenAdminModal }) {
           <div className="footer-links-col">
             <h4>ऑनलाइन फॉर्म्स</h4>
             <ul className="footer-links-list">
-              <li><a href="#forms">धर्माधिकारी आवेदन पत्र</a></li>
-              <li><a href="#forms">आवाह-विवाह बायोडाटा फॉर्म</a></li>
-              <li><a href="#forms">दीक्षा आवेदन-पत्र</a></li>
-              <li><a href="#forms">विवाह प्रमाण-पत्र आवेदन</a></li>
+              <li><a href="#forms" onClick={(e) => scrollToSection(e, '#forms')}>धर्माधिकारी आवेदन पत्र</a></li>
+              <li><a href="#forms" onClick={(e) => scrollToSection(e, '#forms')}>आवाह-विवाह बायोडाटा फॉर्म</a></li>
+              <li><a href="#forms" onClick={(e) => scrollToSection(e, '#forms')}>दीक्षा आवेदन-पत्र</a></li>
+              <li><a href="#forms" onClick={(e) => scrollToSection(e, '#forms')}>विवाह प्रमाण-पत्र आवेदन</a></li>
               <li>
                 <button 
                   onClick={onOpenDonateModal} 

@@ -32,8 +32,21 @@ export function Header({
     { name: "संपर्क", href: "#contact" },
   ];
 
-  const handleLinkClick = () => {
-    setMobileMenuOpen(false);
+  const scrollToSection = (e, href) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      setMobileMenuOpen(false);
+      const target = document.querySelector(href);
+      if (target) {
+        const navHeight = 80;
+        const targetTop = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({
+          top: targetTop,
+          behavior: 'smooth'
+        });
+        window.history.pushState(null, '', href);
+      }
+    }
   };
 
   return (
@@ -78,7 +91,7 @@ export function Header({
       <header className="navbar-sticky">
         <div className="container nav-container">
           {/* Brand Logo & Name */}
-          <a href="#home" className="nav-brand">
+          <a href="#home" onClick={(e) => scrollToSection(e, '#home')} className="nav-brand">
             <div className="brand-logo-wrap">
               <img 
                 src="https://rbjjt.com/wp-content/uploads/2025/12/RBJJT-Official-Logo-70x62.png" 
@@ -101,7 +114,11 @@ export function Header({
             <ul className="nav-links">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="nav-link">
+                  <a 
+                    href={link.href} 
+                    onClick={(e) => scrollToSection(e, link.href)}
+                    className="nav-link"
+                  >
                     {link.name}
                   </a>
                 </li>
@@ -175,7 +192,7 @@ export function Header({
               <li key={link.name}>
                 <a 
                   href={link.href} 
-                  onClick={handleLinkClick}
+                  onClick={(e) => scrollToSection(e, link.href)}
                   style={{ 
                     display: 'block', 
                     padding: '0.75rem 0.5rem', 

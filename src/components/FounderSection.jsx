@@ -23,6 +23,22 @@ export function FounderSection({ onOpenDonateModal }) {
     return () => clearInterval(timer);
   }, []);
 
+  const scrollToSection = (e, href) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        const navHeight = 80;
+        const targetTop = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({
+          top: targetTop,
+          behavior: 'smooth'
+        });
+        window.history.pushState(null, '', href);
+      }
+    }
+  };
+
   return (
     <section id="founder" className="section section-alt">
       <div className="container">
@@ -146,7 +162,11 @@ export function FounderSection({ onOpenDonateModal }) {
                 <span>सीधे व्हाट्सएप परामर्श</span>
               </a>
 
-              <a href="#about" className="btn btn-outline">
+              <a 
+                href="#about" 
+                onClick={(e) => scrollToSection(e, '#about')}
+                className="btn btn-outline"
+              >
                 <span>ट्रस्ट के बारे में जानें</span>
                 <ArrowRight size={15} />
               </a>

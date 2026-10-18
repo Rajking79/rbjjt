@@ -96,6 +96,10 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
+section[id] {
+  scroll-margin-top: 85px;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-bg);
