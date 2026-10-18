@@ -765,20 +765,20 @@ img {
 .founder-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  padding: 2rem 2.25rem;
+  border-radius: var(--radius-2xl);
+  padding: 3.25rem 3.5rem;
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 2rem;
+  grid-template-columns: 310px 1fr;
+  gap: 3.5rem;
   align-items: center;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
   transition: all var(--transition-normal);
 }
 
 .founder-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
   border-color: var(--color-gold);
 }
 
@@ -794,18 +794,18 @@ img {
 
 .founder-img-frame {
   position: relative;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  border: 3px solid var(--color-border-light);
-  box-shadow: var(--shadow-sm);
-  max-width: 260px;
+  border: 4px solid var(--color-gold-light);
+  box-shadow: 0 16px 36px rgba(114, 28, 36, 0.18);
+  width: 100%;
+  max-width: 310px;
   margin: 0 auto;
 }
 
 .founder-img-frame img {
   width: 100%;
-  max-height: 320px;
-  aspect-ratio: 3/3.8;
+  aspect-ratio: 3/4;
   object-fit: cover;
   display: block;
   transition: transform var(--transition-slow);
@@ -817,14 +817,15 @@ img {
 
 .founder-quote-box {
   background-color: var(--color-bg);
-  border-left: 3px solid var(--color-gold);
-  padding: 1rem 1.35rem;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  margin: 1.15rem 0;
+  border-left: 4px solid var(--color-gold);
+  padding: 1.35rem 1.75rem;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  margin: 1.5rem 0;
   font-style: italic;
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--color-text-main);
-  line-height: 1.65;
+  line-height: 1.75;
+  box-shadow: var(--shadow-sm);
 }
 
 /* =========================================================

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { 
   Sparkles, X, Play, Video, Image as ImageIcon, BookOpen, 
-  Quote, Volume2, ArrowRight, CheckCircle2 
+  Quote, Volume2, ArrowRight, CheckCircle2, Calendar, BookMarked, Sun
 } from 'lucide-react';
-import { GALLERY_ITEMS, DHAMMA_VIDEOS, DHAMMA_DISCOURSES } from '../data/trustData';
+import { GALLERY_ITEMS, DHAMMA_VIDEOS, DHAMMA_DISCOURSES, BUDDHA_LITERATURE, UPOSATH_DAYS } from '../data/trustData';
 
 export function GallerySection() {
   const [activeMainTab, setActiveMainTab] = useState('all'); // 'all' | 'videos' | 'discourses' | 'photos'
@@ -23,14 +23,14 @@ export function GallerySection() {
         <div className="section-header">
           <div className="badge-tag animate-bounce-subtle">
             <Sparkles size={14} />
-            <span>चित्र, पावन वीडियो एवं बुद्ध रश्मि धम्मदेशना</span>
+            <span>चित्र, पावन वीडियो, धम्मदेशना व पावन साहित्य</span>
           </div>
           <h2 className="section-title">ट्रस्ट गतिविधि गैलरी व धम्मदेशना</h2>
           <div className="title-ornament">
             <span className="dharma-wheel">☸</span>
           </div>
           <p className="section-subtitle">
-            विभिन्न क्षेत्रों में आयोजित दीक्षा समारोह, संस्कार विवाह, सारनाथ तीर्थ, बुद्ध रश्मि धम्मदेशना और विपश्यना ध्यान की पावन प्रेरणा
+            विभिन्न क्षेत्रों में आयोजित दीक्षा समारोह, संस्कार विवाह, सारनाथ तीर्थ, तथागत बुद्ध पावन धम्मदेशना, उपोसथ साधना और विपश्यना ध्यान की पावन प्रेरणा
           </p>
         </div>
 
@@ -66,7 +66,7 @@ export function GallerySection() {
             style={{ borderRadius: '30px', padding: '0.65rem 1.4rem' }}
           >
             <BookOpen size={18} />
-            <span>📜 बुद्ध रश्मि धम्मदेशना (Discourses)</span>
+            <span>📜 धम्मदेशना व साहित्य (Discourses)</span>
           </button>
 
           <button
@@ -86,7 +86,7 @@ export function GallerySection() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
                 <Video size={20} color="var(--color-gold)" />
                 <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--color-primary)', margin: 0 }}>
-                  पावन वीडियो दर्शन (Official Videos)
+                  पावन वीडियो दर्शन व ध्यान साधना (Official Videos)
                 </h3>
               </div>
             )}
@@ -149,20 +149,22 @@ export function GallerySection() {
 
         {/* SECTION 2: Dhammadesana & Sacred Discourses */}
         {(activeMainTab === 'all' || activeMainTab === 'discourses') && (
-          <div className="animate-fade-in" style={{ marginBottom: activeMainTab === 'all' ? '3rem' : '0' }}>
+          <div className="animate-fade-in" style={{ marginBottom: activeMainTab === 'all' ? '3.5rem' : '0' }}>
             {activeMainTab === 'all' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
                 <BookOpen size={20} color="var(--color-gold)" />
                 <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--color-primary)', margin: 0 }}>
-                  बुद्ध रश्मि पावन धम्मदेशना व अमृतपद (Sacred Discourses)
+                  तथागत बुद्ध पावन धम्मदेशना व अमृतपद (Sacred Discourses)
                 </h3>
               </div>
             )}
 
+            {/* Sutta Gathas */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-              gap: '1.75rem'
+              gap: '1.75rem',
+              marginBottom: '2.5rem'
             }}>
               {DHAMMA_DISCOURSES.map((disc) => (
                 <div 
@@ -225,8 +227,117 @@ export function GallerySection() {
                 </div>
               ))}
             </div>
+
+            {/* Buddha Kaun Hain Literature Feature */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(122, 20, 20, 0.04) 0%, rgba(217, 119, 6, 0.08) 100%)',
+              border: '1.5px solid var(--color-border)',
+              borderRadius: 'var(--radius-xl)',
+              padding: '2rem',
+              marginBottom: '2.5rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+                <BookMarked size={22} color="var(--color-gold)" />
+                <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-gold-dark)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  {BUDDHA_LITERATURE.badge}
+                </span>
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.45rem', color: 'var(--color-primary)', marginBottom: '0.5rem' }}>
+                {BUDDHA_LITERATURE.title}
+              </h3>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.96rem', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: '850px' }}>
+                {BUDDHA_LITERATURE.desc}
+              </p>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '1.25rem'
+              }}>
+                {BUDDHA_LITERATURE.volumes.map((item, idx) => (
+                  <div key={idx} style={{
+                    background: 'var(--color-surface)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 'var(--radius-lg)',
+                    padding: '1.25rem',
+                    boxShadow: 'var(--shadow-sm)'
+                  }}>
+                    <span style={{
+                      display: 'inline-block',
+                      background: 'var(--color-gold-soft)',
+                      color: 'var(--color-gold-dark)',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      padding: '2px 8px',
+                      borderRadius: '8px',
+                      marginBottom: '0.5rem'
+                    }}>
+                      {item.vol}
+                    </span>
+                    <h5 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.05rem', color: 'var(--color-primary)', marginBottom: '0.4rem' }}>
+                      {item.title}
+                    </h5>
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem', lineHeight: 1.6, margin: 0 }}>
+                      {item.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Uposath Calendar Feature */}
+            <div style={{
+              background: 'var(--color-surface)',
+              border: '1.5px solid var(--color-border)',
+              borderRadius: 'var(--radius-xl)',
+              padding: '2rem',
+              boxShadow: 'var(--shadow-sm)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+                <Calendar size={22} color="var(--color-gold)" />
+                <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-gold-dark)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  मासिक उपोसथ दिवस एवं अष्टांग शील साधना
+                </span>
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--color-primary)', marginBottom: '0.4rem' }}>
+                उपोसथ साधना कैलेंडर (RBJJT Sarnath)
+              </h3>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.94rem', lineHeight: 1.65, marginBottom: '1.5rem' }}>
+                तथागत बुद्ध के धम्म मार्ग पर चलने वाले प्रत्येक उपासक व उपासिका के लिए माह के चार पावन दिन उपोसथ शील धारण करना परम कल्याणकारी माना गया है:
+              </p>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: '1.25rem'
+              }}>
+                {UPOSATH_DAYS.map((uposath, idx) => (
+                  <div key={idx} style={{
+                    background: 'var(--color-bg)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 'var(--radius-lg)',
+                    padding: '1.25rem',
+                    position: 'relative'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                      <Sun size={16} color="var(--color-gold)" />
+                      <h5 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.05rem', color: 'var(--color-primary)', margin: 0 }}>
+                        {uposath.phase}
+                      </h5>
+                    </div>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--color-gold-dark)', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+                      {uposath.tithi} • {uposath.rule}
+                    </span>
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem', lineHeight: 1.6, margin: 0 }}>
+                      {uposath.benefit}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
+
 
         {/* SECTION 3: Photo Gallery */}
         {(activeMainTab === 'all' || activeMainTab === 'photos') && (
