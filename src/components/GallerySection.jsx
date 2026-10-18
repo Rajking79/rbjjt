@@ -6,10 +6,9 @@ import {
 import { GALLERY_ITEMS, DHAMMA_VIDEOS, DHAMMA_DISCOURSES } from '../data/trustData';
 
 export function GallerySection() {
-  const [activeMainTab, setActiveMainTab] = useState('photos'); // 'photos' | 'videos' | 'discourses'
+  const [activeMainTab, setActiveMainTab] = useState('all'); // 'all' | 'videos' | 'discourses' | 'photos'
   const [photoCategory, setPhotoCategory] = useState('सभी (All)');
   const [lightboxItem, setLightboxItem] = useState(null);
-  const [activeVideoModal, setActiveVideoModal] = useState(null);
 
   const photoCategories = ['सभी (All)', 'संस्कार', 'दीक्षा', 'विहार', 'शिक्षा', 'स्वास्थ्य', 'सुरक्षा'];
 
@@ -24,7 +23,7 @@ export function GallerySection() {
         <div className="section-header">
           <div className="badge-tag animate-bounce-subtle">
             <Sparkles size={14} />
-            <span>चित्र, पावन वीडियो एवं धम्मदेशना</span>
+            <span>चित्र, पावन वीडियो एवं बुद्ध रश्मि धम्मदेशना</span>
           </div>
           <h2 className="section-title">ट्रस्ट गतिविधि गैलरी व धम्मदेशना</h2>
           <div className="title-ornament">
@@ -35,21 +34,21 @@ export function GallerySection() {
           </p>
         </div>
 
-        {/* 3 Main Navigation Tabs */}
+        {/* 4 Main Navigation Tabs */}
         <div style={{
           display: 'flex',
           justifyContent: 'center',
           gap: '0.75rem',
           flexWrap: 'wrap',
-          marginBottom: '2rem'
+          marginBottom: '2.5rem'
         }}>
           <button
-            onClick={() => setActiveMainTab('photos')}
-            className={`btn ${activeMainTab === 'photos' ? 'btn-gold' : 'btn-outline'}`}
+            onClick={() => setActiveMainTab('all')}
+            className={`btn ${activeMainTab === 'all' ? 'btn-gold' : 'btn-outline'}`}
             style={{ borderRadius: '30px', padding: '0.65rem 1.4rem' }}
           >
-            <ImageIcon size={18} />
-            <span>📸 फोटो गैलरी (Photos)</span>
+            <Sparkles size={18} />
+            <span>🌟 सब कुछ देखें (All)</span>
           </button>
 
           <button
@@ -58,7 +57,7 @@ export function GallerySection() {
             style={{ borderRadius: '30px', padding: '0.65rem 1.4rem' }}
           >
             <Video size={18} />
-            <span>🎥 पावन वीडियो गैलरी (Videos)</span>
+            <span>🎥 पावन वीडियो (Videos)</span>
           </button>
 
           <button
@@ -67,69 +66,31 @@ export function GallerySection() {
             style={{ borderRadius: '30px', padding: '0.65rem 1.4rem' }}
           >
             <BookOpen size={18} />
-            <span>📜 धम्मदेशना व अमृतपद (Discourses)</span>
+            <span>📜 बुद्ध रश्मि धम्मदेशना (Discourses)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveMainTab('photos')}
+            className={`btn ${activeMainTab === 'photos' ? 'btn-gold' : 'btn-outline'}`}
+            style={{ borderRadius: '30px', padding: '0.65rem 1.4rem' }}
+          >
+            <ImageIcon size={18} />
+            <span>📸 फोटो गैलरी (Photos)</span>
           </button>
         </div>
 
-        {/* TAB 1: Photo Gallery */}
-        {activeMainTab === 'photos' && (
-          <div className="animate-fade-in">
-            {/* Gallery Category Filter Buttons */}
-            <div className="gallery-filters" style={{ marginBottom: '1.75rem' }}>
-              {photoCategories.map((cat) => (
-                <button
-                  key={cat}
-                  className={`filter-btn ${photoCategory === cat ? 'active' : ''}`}
-                  onClick={() => setPhotoCategory(cat)}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+        {/* SECTION 1: Video Gallery */}
+        {(activeMainTab === 'all' || activeMainTab === 'videos') && (
+          <div className="animate-fade-in" style={{ marginBottom: activeMainTab === 'all' ? '3rem' : '0' }}>
+            {activeMainTab === 'all' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
+                <Video size={20} color="var(--color-gold)" />
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--color-primary)', margin: 0 }}>
+                  पावन वीडियो दर्शन (Official Videos)
+                </h3>
+              </div>
+            )}
 
-            {/* Photo Grid */}
-            <div className="gallery-grid">
-              {filteredPhotos.map((item) => (
-                <div 
-                  key={item.id} 
-                  className="gallery-card"
-                  onClick={() => setLightboxItem(item)}
-                >
-                  <img 
-                    src={item.image} 
-                    alt={item.title} 
-                    loading="lazy"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "https://rbjjt.com/wp-content/uploads/2026/01/1619887156_mulagandha_kuti_vihar.jpg.webp";
-                    }}
-                  />
-                  <div className="gallery-overlay">
-                    <span style={{ 
-                      display: 'inline-block',
-                      background: 'rgba(217, 119, 6, 0.9)', 
-                      color: '#FFF', 
-                      fontSize: '0.72rem', 
-                      padding: '2px 8px', 
-                      borderRadius: '12px',
-                      width: 'fit-content',
-                      marginBottom: '0.3rem',
-                      fontWeight: 700
-                    }}>
-                      {item.category}
-                    </span>
-                    <h5>{item.title}</h5>
-                    <p>{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* TAB 2: Video Gallery */}
-        {activeMainTab === 'videos' && (
-          <div className="animate-fade-in">
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
@@ -186,9 +147,18 @@ export function GallerySection() {
           </div>
         )}
 
-        {/* TAB 3: Dhammadesana & Sacred Discourses */}
-        {activeMainTab === 'discourses' && (
-          <div className="animate-fade-in">
+        {/* SECTION 2: Dhammadesana & Sacred Discourses */}
+        {(activeMainTab === 'all' || activeMainTab === 'discourses') && (
+          <div className="animate-fade-in" style={{ marginBottom: activeMainTab === 'all' ? '3rem' : '0' }}>
+            {activeMainTab === 'all' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
+                <BookOpen size={20} color="var(--color-gold)" />
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--color-primary)', margin: 0 }}>
+                  बुद्ध रश्मि पावन धम्मदेशना व अमृतपद (Sacred Discourses)
+                </h3>
+              </div>
+            )}
+
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
@@ -251,6 +221,71 @@ export function GallerySection() {
                     <p style={{ color: 'var(--color-text-main)', fontSize: '0.94rem', lineHeight: 1.68, margin: 0 }}>
                       {disc.meaning}
                     </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* SECTION 3: Photo Gallery */}
+        {(activeMainTab === 'all' || activeMainTab === 'photos') && (
+          <div className="animate-fade-in">
+            {activeMainTab === 'all' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem' }}>
+                <ImageIcon size={20} color="var(--color-gold)" />
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--color-primary)', margin: 0 }}>
+                  सेवा गतिविधि चित्र दीर्घा (Photo Gallery)
+                </h3>
+              </div>
+            )}
+
+            {/* Gallery Category Filter Buttons */}
+            <div className="gallery-filters" style={{ marginBottom: '1.75rem' }}>
+              {photoCategories.map((cat) => (
+                <button
+                  key={cat}
+                  className={`filter-btn ${photoCategory === cat ? 'active' : ''}`}
+                  onClick={() => setPhotoCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Photo Grid */}
+            <div className="gallery-grid">
+              {filteredPhotos.map((item) => (
+                <div 
+                  key={item.id} 
+                  className="gallery-card"
+                  onClick={() => setLightboxItem(item)}
+                >
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://rbjjt.com/wp-content/uploads/2026/01/1619887156_mulagandha_kuti_vihar.jpg.webp";
+                    }}
+                  />
+                  <div className="gallery-overlay">
+                    <span style={{ 
+                      display: 'inline-block',
+                      background: 'rgba(217, 119, 6, 0.9)', 
+                      color: '#FFF', 
+                      fontSize: '0.72rem', 
+                      padding: '2px 8px', 
+                      borderRadius: '12px',
+                      width: 'fit-content',
+                      marginBottom: '0.3rem',
+                      fontWeight: 700
+                    }}>
+                      {item.category}
+                    </span>
+                    <h5>{item.title}</h5>
+                    <p>{item.desc}</p>
                   </div>
                 </div>
               ))}

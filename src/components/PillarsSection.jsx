@@ -46,16 +46,17 @@ export function PillarsSection({ onOpenDonateModal }) {
           {PILLARS.map((pillar) => (
             <div key={pillar.id} className="pillar-card">
               {/* Media with Image */}
-              <div className="pillar-media" style={{ height: '190px', position: 'relative', overflow: 'hidden' }}>
-                <img 
-                  src={pillar.image} 
-                  alt={pillar.titleHi}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://rbjjt.com/wp-content/uploads/2026/03/icon_no_bg_256.png";
-                  }}
-                />
+              <div className="pillar-media">
+                <div className="pillar-media-img-wrap">
+                  <img 
+                    src={pillar.image} 
+                    alt={pillar.titleHi}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://rbjjt.com/wp-content/uploads/2026/03/icon_no_bg_256.png";
+                    }}
+                  />
+                </div>
                 <div className="pillar-icon-badge" style={{ color: pillar.accentColor }}>
                   {getIcon(pillar.icon)}
                 </div>
