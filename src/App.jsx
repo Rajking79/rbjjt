@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
+import { MarqueeBanner } from './components/MarqueeBanner';
 import { Hero } from './components/Hero';
 import { FounderSection } from './components/FounderSection';
 import { AboutSection } from './components/AboutSection';
@@ -54,6 +55,9 @@ export function App() {
         onOpenAdminModal={() => setIsAdminModalOpen(true)}
         submittedCount={recordCount}
       />
+
+      {/* Live Continuous Marquee Ticker */}
+      <MarqueeBanner />
 
       <main>
         {/* 1. Hero Section */}
