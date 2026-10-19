@@ -4,6 +4,7 @@ import {
   ExternalLink, ArrowUp, Database 
 } from 'lucide-react';
 import { TRUST_INFO } from '../data/trustData';
+import logoHD from '../assets/rbjjt-logo-hd.jpg';
 
 export function Footer({ onOpenDonateModal, onOpenAdminModal }) {
   const scrollToTop = () => {
@@ -33,9 +34,9 @@ export function Footer({ onOpenDonateModal, onOpenAdminModal }) {
           {/* Col 1: Brand Info */}
           <div className="footer-brand">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-              <div className="brand-logo-wrap" style={{ width: '46px', height: '46px' }}>
+              <div className="brand-logo-wrap" style={{ width: '52px', height: '52px' }}>
                 <img 
-                  src="https://rbjjt.com/wp-content/uploads/2025/12/RBJJT-Official-Logo-70x62.png" 
+                  src={logoHD} 
                   alt="RBJJT Logo" 
                   className="brand-logo-img" 
                 />

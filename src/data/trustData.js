@@ -5,6 +5,7 @@ export const TRUST_INFO = {
   nameEn: "Rashtriya Bauddha Jan Jagaran Trust",
   shortName: "RBJJT",
   regNo: "Reg. No. 069/16",
+  logo: "./rbjjt-logo-hd.jpg",
   motto: "“उदाहरण तो अपने जीवन से प्रस्तुत करना पड़ता है” — तथागत बुद्ध",
   subMotto: "भवतु सब्ब मंगलं (सबका कल्याण हो)",
   headquarters: "ऋषिपत्तन मार्ग, सारनाथ, वाराणसी, उत्तर प्रदेश - 221007",

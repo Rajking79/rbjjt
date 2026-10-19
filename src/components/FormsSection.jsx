@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { TRUST_INFO } from '../data/trustData';
+import logoHD from '../assets/rbjjt-logo-hd.jpg';
 
 export function FormsSection({ onRecordAdded }) {
   const [activeTab, setActiveTab] = useState('dhammadhikari'); // 'dhammadhikari' | 'matrimonial' | 'diksha' | 'marriageCert' | 'healthCamp'
@@ -459,7 +460,7 @@ export function FormsSection({ onRecordAdded }) {
                   paddingBottom: '1rem',
                   marginBottom: '1.25rem'
                 }}>
-                  <img src="https://rbjjt.com/wp-content/uploads/2025/12/RBJJT-Official-Logo-70x62.png" alt="Logo" style={{ width: '42px', height: '42px' }} />
+                  <img src={logoHD} alt="RBJJT Official Logo" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
                   <div>
                     <h3 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)', fontSize: '1.25rem', margin: 0 }}>
                       राष्ट्रीय बौद्ध जन जागरण ट्रस्ट

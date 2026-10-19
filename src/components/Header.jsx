@@ -4,6 +4,7 @@ import {
   MapPin, FileText, Database, Compass
 } from 'lucide-react';
 import { TRUST_INFO } from '../data/trustData';
+import logoHD from '../assets/rbjjt-logo-hd.jpg';
 
 export function Header({ 
   theme, 
@@ -94,13 +95,9 @@ export function Header({
           <a href="#home" onClick={(e) => scrollToSection(e, '#home')} className="nav-brand">
             <div className="brand-logo-wrap">
               <img 
-                src="https://rbjjt.com/wp-content/uploads/2025/12/RBJJT-Official-Logo-70x62.png" 
+                src={logoHD} 
                 alt="RBJJT Logo" 
                 className="brand-logo-img"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://rbjjt.com/wp-content/uploads/2025/12/RBJJT-Official-Logo.png";
-                }}
               />
             </div>
             <div className="brand-text">
@@ -169,8 +166,8 @@ export function Header({
       <aside className={`mobile-drawer ${mobileMenuOpen ? 'open' : ''}`}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <div className="brand-logo-wrap" style={{ width: '42px', height: '42px' }}>
-              <img src="https://rbjjt.com/wp-content/uploads/2025/12/RBJJT-Official-Logo-70x62.png" alt="RBJJT Logo" className="brand-logo-img" />
+            <div className="brand-logo-wrap" style={{ width: '46px', height: '46px' }}>
+              <img src={logoHD} alt="RBJJT Logo" className="brand-logo-img" />
             </div>
             <div>
               <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', color: 'var(--color-primary)' }}>RBJJT</h4>
