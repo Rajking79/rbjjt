@@ -370,6 +370,8 @@ img {
   align-items: center;
   gap: 0.85rem;
   text-decoration: none;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .brand-logo-wrap {
@@ -396,12 +398,19 @@ img {
   display: block;
 }
 
+.brand-text {
+  min-width: 0;
+}
+
 .brand-text h1 {
   font-family: var(--font-heading);
-  font-size: 1.15rem;
+  font-size: clamp(0.92rem, 3.4vw, 1.15rem);
   font-weight: 800;
   color: var(--color-primary);
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [data-theme="dark"] .brand-text h1 {
@@ -413,6 +422,9 @@ img {
   color: var(--color-gold-dark);
   font-weight: 700;
   display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [data-theme="dark"] .brand-text span {
@@ -1719,162 +1731,6 @@ img {
 }
 
 /* =========================================================
-   Responsive Breakpoints
-   ========================================================= */
-@media (max-width: 1024px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .hero-quote-card {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hero-cta-group {
-    justify-content: center;
-  }
-
-  .hero-stats-row {
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  .founder-card {
-    grid-template-columns: 1fr;
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .founder-img-frame {
-    max-width: 280px;
-    margin: 0 auto;
-  }
-
-  .donation-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .footer-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  :root {
-    --header-height: 70px;
-  }
-
-  .nav-links, .nav-actions .btn-donate-desktop {
-    display: none;
-  }
-
-  .hamburger-btn {
-    display: flex;
-  }
-
-  .top-bar {
-    display: none; /* Hide top bar on mobile for clean viewport */
-  }
-
-  .section {
-    padding: 2.25rem 0;
-  }
-
-  .form-grid-2,
-  .form-grid-3 {
-    grid-template-columns: 1fr;
-  }
-
-  .form-body {
-    padding: 1.25rem;
-  }
-
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
-  }
-
-  .roadmap-card {
-    grid-template-columns: 1fr;
-    padding-left: 1.25rem;
-  }
-
-  .roadmap-timeline::before {
-    display: none;
-  }
-
-  .amount-chips-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .hero-title {
-    font-size: 1.75rem;
-  }
-
-  .hero-desc {
-    font-size: 0.95rem;
-  }
-
-  .hero-quote-card {
-    padding: 0.6rem 0.9rem;
-  }
-
-  .hero-quote-card p {
-    font-size: 0.92rem;
-  }
-
-  .hero-stats-row {
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
-  }
-
-  .hero-cta-group .btn {
-    width: 100%;
-  }
-
-  .btn-lg {
-    padding: 0.75rem 1.4rem;
-    font-size: 0.95rem;
-  }
-
-  .founder-card {
-    padding: 1.25rem 1rem;
-  }
-
-  .form-body {
-    padding: 1rem;
-  }
-
-  .modal-content {
-    margin: 0.5rem;
-    max-height: 94vh;
-  }
-
-  .modal-header,
-  .modal-body {
-    padding: 1rem;
-  }
-
-  .bank-info-card,
-  .qr-code-card {
-    padding: 1.25rem 1rem;
-  }
-}
-
-/* =========================================================
    Continuous Live Marquee Banner (Self-moving words ticker)
    ========================================================= */
 .marquee-wrapper {
@@ -2060,10 +1916,55 @@ img {
               border-color 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* About Section Specific Classes */
+/* Helper Utilities & Responsive Base Grids */
+.hidden-mobile {
+  display: inline;
+}
+
+.gallery-videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 1.75rem;
+}
+
+.gallery-discourses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.gallery-literature-card {
+  background: linear-gradient(135deg, rgba(122, 20, 20, 0.04) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.gallery-literature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 1.25rem;
+}
+
+.gallery-uposath-card {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.gallery-uposath-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 1.25rem;
+}
+
 .about-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -2095,20 +1996,83 @@ img {
   margin-bottom: 1.15rem;
 }
 
+.about-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  gap: 1.25rem;
+  text-align: center;
+}
+
 .about-info-banner {
   background: linear-gradient(135deg, rgba(122, 20, 20, 0.05), rgba(217, 119, 6, 0.08));
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: 1.75rem 2rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 1.75rem;
   align-items: center;
 }
 
-/* =========================================================
-   Floating Right-Hand Action Dock & Slip Print Styles
-   ========================================================= */
+.roadmap-cta-banner {
+  text-align: center;
+  margin-top: 3.5rem;
+  padding: 2.5rem 2rem;
+  background: linear-gradient(135deg, var(--color-primary-subtle), var(--color-gold-soft));
+  border-radius: var(--radius-xl);
+  border: 1.5px solid var(--color-border);
+}
+
+.join-dhammadhikari-banner {
+  margin-top: 3.5rem;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-gold);
+  border-radius: var(--radius-xl);
+  padding: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+  box-shadow: var(--shadow-md);
+}
+
+.contact-form-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2.25rem;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 2rem;
+}
+
+.hero-visual-container {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.hero-visual-meta-card {
+  margin-top: 0.75rem;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-normal);
+}
+
+.hero-visual-meta-card:hover {
+  border-color: var(--color-gold);
+}
+
+.video-showcase-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
 .floating-actions-dock {
   position: fixed;
   bottom: 20px;
@@ -2120,35 +2084,6 @@ img {
   filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.25));
 }
 
-@media print {
-  header,
-  footer,
-  .floating-actions-dock,
-  .marquee-ticker-wrap,
-  .nav-links,
-  .form-nav-tabs,
-  button {
-    display: none !important;
-  }
-
-  body {
-    background: #FFF !important;
-    color: #000 !important;
-  }
-
-  .trust-slip-container {
-    box-shadow: none !important;
-    border: 2px solid #5C0E0E !important;
-    page-break-inside: avoid;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-  }
-}
-
-/* =========================================================
-   Scroll To Top Floating Button
-   ========================================================= */
 .scroll-to-top-btn {
   position: fixed;
   bottom: 80px;
@@ -2176,32 +2111,460 @@ img {
 }
 
 /* =========================================================
-   Hero Visual Container & Clean Meta Card Under Buddha Image
+   Responsive Breakpoints - Flawless on Any Phone, Tablet, Laptop, Desktop
    ========================================================= */
-.hero-visual-container {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
+
+/* Laptops & Small Desktops (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .hero-grid {
+    gap: 2rem;
+  }
+
+  .founder-card {
+    grid-template-columns: 280px 1fr;
+    gap: 2.5rem;
+    padding: 2.5rem;
+  }
 }
 
-.hero-visual-meta-card {
-  margin-top: 0.75rem;
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 0.85rem 1rem;
-  box-shadow: var(--shadow-sm);
-  transition: border-color var(--transition-normal);
+/* Tablets (Landscape & Portrait) (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2.5rem;
+  }
+
+  .hero-quote-card {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-cta-group {
+    justify-content: center;
+  }
+
+  .hero-stats-row {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .founder-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 2.25rem 2rem;
+    gap: 2rem;
+  }
+
+  .founder-img-frame {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  .founder-info-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .founder-quote-box {
+    text-align: left;
+    width: 100%;
+  }
+
+  .donation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .pillars-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  }
 }
 
-.hero-visual-meta-card:hover {
-  border-color: var(--color-gold);
+/* Tablets Portrait & Phablets (max-width: 768px) */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 70px;
+  }
+
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  .top-bar {
+    display: none; /* Hide top bar for clean mobile viewport */
+  }
+
+  .nav-links, 
+  .nav-actions .btn-donate-desktop {
+    display: none;
+  }
+
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .section {
+    padding: 2.25rem 0;
+  }
+
+  .section-title {
+    font-size: clamp(1.65rem, 5vw, 2.15rem);
+  }
+
+  .section-subtitle {
+    font-size: 0.96rem;
+  }
+
+  .hero-section {
+    padding: 1.75rem 0 2.5rem 0;
+  }
+
+  .hero-title {
+    font-size: clamp(1.65rem, 4.8vw, 2.2rem);
+    line-height: 1.35;
+  }
+
+  .hero-desc {
+    font-size: 0.98rem;
+    line-height: 1.68;
+  }
+
+  .roadmap-card {
+    grid-template-columns: 1fr;
+    padding-left: 1.25rem;
+  }
+
+  .roadmap-timeline::before {
+    display: none;
+  }
+
+  .form-grid-2,
+  .form-grid-3 {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .form-body {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .form-tab-btn {
+    padding: 0.85rem 1.15rem;
+    font-size: 0.86rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .join-dhammadhikari-banner {
+    padding: 1.75rem 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .join-dhammadhikari-banner .btn {
+    width: 100%;
+  }
+
+  .roadmap-cta-banner {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .roadmap-cta-banner .btn {
+    width: 100%;
+  }
+
+  .contact-form-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .amount-chips-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .modal-content {
+    width: 95vw;
+    margin: 0.75rem auto;
+    max-height: 92vh;
+  }
+
+  .modal-header,
+  .modal-body {
+    padding: 1.25rem 1rem;
+  }
 }
 
-.video-showcase-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--color-gold) !important;
-  box-shadow: var(--shadow-lg) !important;
+/* Standard Mobile Phones (max-width: 640px) */
+@media (max-width: 640px) {
+  .typewriter-container {
+    white-space: normal;
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.88em;
+    line-height: 1.4;
+    word-break: break-word;
+    border-radius: var(--radius-sm);
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-info-banner {
+    grid-template-columns: 1fr;
+    padding: 1.25rem 1rem;
+  }
+
+  .gallery-literature-card,
+  .gallery-uposath-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .gallery-videos-grid,
+  .gallery-discourses-grid,
+  .gallery-literature-grid,
+  .gallery-uposath-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bank-detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .bank-detail-value {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .submission-slip-card {
+    padding: 1.25rem 0.85rem;
+  }
+
+  .floating-actions-dock {
+    bottom: 15px;
+    right: 15px;
+    gap: 0.45rem;
+  }
+
+  .floating-actions-dock .btn {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .scroll-to-top-btn {
+    bottom: 72px;
+    right: 16px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.75rem;
+  }
 }
+
+/* Small Mobile Phones (max-width: 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  .brand-logo-wrap {
+    width: 42px;
+    height: 42px;
+  }
+
+  .brand-text h1 {
+    font-size: clamp(0.82rem, 3.4vw, 0.98rem);
+    max-width: calc(100vw - 120px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand-text span {
+    font-size: 0.68rem;
+  }
+
+  .theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hamburger-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hero-title {
+    font-size: 1.6rem;
+    letter-spacing: -0.2px;
+  }
+
+  .hero-quote-card {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .hero-quote-card p {
+    font-size: 0.88rem;
+  }
+
+  .hero-desc {
+    font-size: 0.92rem;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-stats-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    max-width: 100%;
+  }
+
+  .hero-stat-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .hero-stat-item h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0;
+  }
+
+  .hero-stat-item p {
+    margin: 0;
+    font-size: 0.82rem;
+  }
+
+  .founder-card {
+    padding: 1.25rem 0.85rem;
+  }
+
+  .founder-img-frame {
+    max-width: 220px;
+  }
+
+  .founder-quote-box {
+    padding: 0.95rem 1rem;
+    font-size: 0.92rem;
+  }
+
+  .founder-info-body .btn {
+    width: 100%;
+  }
+
+  .form-body {
+    padding: 1rem 0.75rem;
+  }
+
+  .amount-chips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bank-info-card,
+  .qr-code-card {
+    padding: 1.15rem 0.85rem;
+  }
+
+  .btn {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.92rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+}
+
+/* Extra Small Phones (max-width: 360px - e.g. iPhone SE, Fold) */
+@media (max-width: 360px) {
+  .container {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+  }
+
+  .brand-logo-wrap {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-text h1 {
+    font-size: 0.82rem;
+  }
+
+  .hero-title {
+    font-size: 1.45rem;
+  }
+
+  .form-tab-btn {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* =========================================================
+   Print Styles for Official Trust Slips & Receipts
+   ========================================================= */
+@media print {
+  header,
+  footer,
+  .floating-actions-dock,
+  .marquee-ticker-wrap,
+  .nav-links,
+  .form-nav-tabs,
+  button {
+    display: none !important;
+  }
+
+  body {
+    background: #FFF !important;
+    color: #000 !important;
+  }
+
+  .trust-slip-container {
+    box-shadow: none !important;
+    border: 2px solid #5C0E0E !important;
+    page-break-inside: avoid;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
 

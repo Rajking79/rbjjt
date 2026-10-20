@@ -75,19 +75,7 @@ export function DhammadhikariSection() {
         </div>
 
         {/* Join as Dhammadhikari Banner */}
-        <div style={{
-          marginTop: '3.5rem',
-          background: 'var(--color-surface)',
-          border: '1.5px solid var(--color-gold)',
-          borderRadius: 'var(--radius-xl)',
-          padding: '2.5rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '2rem',
-          boxShadow: 'var(--shadow-md)'
-        }}>
+        <div className="join-dhammadhikari-banner">
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
             <div style={{
               width: '60px',

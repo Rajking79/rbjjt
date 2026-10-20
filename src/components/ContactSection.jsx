@@ -146,14 +146,7 @@ export function ContactSection() {
 
           {/* Right: Interactive Contact Form & Map */}
           <div>
-            <div style={{
-              background: 'var(--color-surface)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius-xl)',
-              padding: '2.5rem',
-              boxShadow: 'var(--shadow-md)',
-              marginBottom: '2rem'
-            }}>
+            <div className="contact-form-card">
               <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', color: 'var(--color-primary)', marginBottom: '1.2rem' }}>
                 ऑनलाइन संदेश भेजें (Send a Message)
               </h3>

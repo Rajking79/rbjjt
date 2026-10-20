@@ -38,11 +38,7 @@ export function PillarsSection({ onOpenDonateModal }) {
         </div>
 
         {/* 5 Pillars Grid */}
-        <div className="pillars-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-          gap: '1.75rem'
-        }}>
+        <div className="pillars-grid">
           {PILLARS.map((pillar) => (
             <div key={pillar.id} className="pillar-card">
               {/* Media with Image */}

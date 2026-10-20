@@ -72,14 +72,7 @@ export function RoadmapSection() {
         </div>
 
         {/* Bottom Banner */}
-        <div style={{
-          textAlign: 'center',
-          marginTop: '4rem',
-          padding: '2.5rem',
-          background: 'linear-gradient(135deg, var(--color-primary-subtle), var(--color-gold-soft))',
-          borderRadius: 'var(--radius-xl)',
-          border: '1.5px solid var(--color-border)'
-        }}>
+        <div className="roadmap-cta-banner">
           <h3 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-primary)', marginBottom: '0.6rem', fontSize: '1.4rem' }}>
             क्या आप भी अपने गांव या क्षेत्र में धम्म केंद्र स्थापित करना चाहते हैं?
           </h3>

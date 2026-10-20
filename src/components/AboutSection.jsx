@@ -25,7 +25,7 @@ export function AboutSection() {
         </div>
 
         {/* 4 Core Purpose Cards Grid */}
-        <div className="about-cards-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+        <div className="about-cards-grid">
           {/* Card 1: Mission */}
           <div className="about-card">
             <div className="about-card-icon" style={{ background: 'var(--color-gold-soft)', color: 'var(--color-gold-dark)' }}>
@@ -97,12 +97,7 @@ export function AboutSection() {
             </h3>
           </div>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '1.5rem',
-            textAlign: 'center'
-          }}>
+          <div className="about-stats-grid">
             {STATS.map((stat, i) => (
               <div key={i} style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.06)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.12)' }}>
                 <div style={{ fontFamily: 'var(--font-heading)', fontSize: '2.1rem', fontWeight: 800, color: 'var(--color-gold-light)' }}>

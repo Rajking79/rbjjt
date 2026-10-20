@@ -91,11 +91,7 @@ export function GallerySection() {
               </div>
             )}
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-              gap: '2rem'
-            }}>
+            <div className="gallery-videos-grid">
               {DHAMMA_VIDEOS.map((vid) => (
                 <div 
                   key={vid.id}
@@ -160,12 +156,7 @@ export function GallerySection() {
             )}
 
             {/* Sutta Gathas */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-              gap: '1.75rem',
-              marginBottom: '2.5rem'
-            }}>
+            <div className="gallery-discourses-grid">
               {DHAMMA_DISCOURSES.map((disc) => (
                 <div 
                   key={disc.id}
@@ -229,13 +220,7 @@ export function GallerySection() {
             </div>
 
             {/* Buddha Kaun Hain Literature Feature */}
-            <div style={{
-              background: 'linear-gradient(135deg, rgba(122, 20, 20, 0.04) 0%, rgba(217, 119, 6, 0.08) 100%)',
-              border: '1.5px solid var(--color-border)',
-              borderRadius: 'var(--radius-xl)',
-              padding: '2rem',
-              marginBottom: '2.5rem'
-            }}>
+            <div className="gallery-literature-card">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
                 <BookMarked size={22} color="var(--color-gold)" />
                 <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-gold-dark)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -249,11 +234,7 @@ export function GallerySection() {
                 {BUDDHA_LITERATURE.desc}
               </p>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '1.25rem'
-              }}>
+              <div className="gallery-literature-grid">
                 {BUDDHA_LITERATURE.volumes.map((item, idx) => (
                   <div key={idx} style={{
                     background: 'var(--color-surface)',
@@ -286,13 +267,7 @@ export function GallerySection() {
             </div>
 
             {/* Uposath Calendar Feature */}
-            <div style={{
-              background: 'var(--color-surface)',
-              border: '1.5px solid var(--color-border)',
-              borderRadius: 'var(--radius-xl)',
-              padding: '2rem',
-              boxShadow: 'var(--shadow-sm)'
-            }}>
+            <div className="gallery-uposath-card">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
                 <Calendar size={22} color="var(--color-gold)" />
                 <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-gold-dark)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -306,11 +281,7 @@ export function GallerySection() {
                 तथागत बुद्ध के धम्म मार्ग पर चलने वाले प्रत्येक उपासक व उपासिका के लिए माह के चार पावन दिन उपोसथ शील धारण करना परम कल्याणकारी माना गया है:
               </p>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                gap: '1.25rem'
-              }}>
+              <div className="gallery-uposath-grid">
                 {UPOSATH_DAYS.map((uposath, idx) => (
                   <div key={idx} style={{
                     background: 'var(--color-bg)',
