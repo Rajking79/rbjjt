@@ -25,11 +25,13 @@ export function Header({
   const navLinks = [
     { name: "मुख्य पृष्ठ", href: "#home" },
     { name: "हमारे बारे में", href: "#about" },
-    { name: "5 मुख्य स्तंभ", href: "#pillars" },
-    { name: "कार्य योजना", href: "#roadmap" },
+    { name: "5 स्तंभ", href: "#pillars" },
+    { name: "सारनाथ", href: "#sarnath" },
+    { name: "बुद्ध वंदना", href: "#vandana" },
     { name: "धर्माधिकारी", href: "#dhammadhikari" },
-    { name: "ऑनलाइन फॉर्म्स", href: "#forms" },
-    { name: "गैलरी", href: "#gallery" },
+    { name: "ऑनलाइन फॉर्म", href: "#forms" },
+    { name: "कार्यक्रम", href: "#events" },
+    { name: "डाउनलोड", href: "#downloads" },
     { name: "संपर्क", href: "#contact" },
   ];
 

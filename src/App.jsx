@@ -4,12 +4,15 @@ import { MarqueeBanner } from './components/MarqueeBanner';
 import { Hero } from './components/Hero';
 import { FounderSection } from './components/FounderSection';
 import { AboutSection } from './components/AboutSection';
-import { PillarsSection } from './components/PillarsSection';
-import { RoadmapSection } from './components/RoadmapSection';
+import { SarnathHeritageSection } from './components/SarnathHeritageSection';
+import { DailyVandanaSection } from './components/DailyVandanaSection';
 import { DhammadhikariSection } from './components/DhammadhikariSection';
 import { FormsSection } from './components/FormsSection';
 import { DonationSection } from './components/DonationSection';
+import { EventsCalendarSection } from './components/EventsCalendarSection';
 import { GallerySection } from './components/GallerySection';
+import { DownloadsSection } from './components/DownloadsSection';
+import { FAQSection } from './components/FAQSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { DonationModal } from './components/DonationModal';
@@ -74,18 +77,18 @@ export function App() {
           onOpenDonateModal={() => setIsDonateModalOpen(true)} 
         />
 
-        {/* 3. About Trust Section */}
-        <AboutSection />
-
-        {/* 4. Five Core Pillars */}
-        <PillarsSection 
+        {/* 3. 5 Core Pillars & Legal Credentials Combined (Compact Cards) */}
+        <AboutSection 
           onOpenDonateModal={() => setIsDonateModalOpen(true)} 
         />
 
-        {/* 5. Five-Tier Roadmap & Goals */}
-        <RoadmapSection />
+        {/* 4. Sacred Rishipattan Sarnath Heritage & Center */}
+        <SarnathHeritageSection />
 
-        {/* 6. Dhammadhikaris & Upasaks Showcase */}
+        {/* 4.1 Daily Buddha Vandana & Pali Chants */}
+        <DailyVandanaSection />
+
+        {/* 5. Dhammadhikaris & Upasaks Showcase */}
         <DhammadhikariSection />
 
         {/* 7. Comprehensive Forms Suite */}
@@ -96,8 +99,17 @@ export function App() {
         {/* 8. Dedicated Donation Section */}
         <DonationSection />
 
+        {/* 8.1 Upcoming Events & Annual Festivals */}
+        <EventsCalendarSection />
+
         {/* 9. Activity Gallery */}
         <GallerySection />
+
+        {/* 9.1 Official Downloads Center */}
+        <DownloadsSection />
+
+        {/* 9.2 Frequently Asked Questions (FAQs) */}
+        <FAQSection />
 
         {/* 10. Contact & Location */}
         <ContactSection />

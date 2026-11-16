@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
   X, Database, Search, Download, Trash2, CheckCircle2, 
-  Clock, Filter, ShieldCheck, RefreshCw, Settings, Save, Check 
+  Clock, Filter, ShieldCheck, RefreshCw, Settings, Save, Check, Eye, ArrowLeft 
 } from 'lucide-react';
 import { INITIAL_RECORDS, TRUST_INFO } from '../data/trustData';
+import { OfficialDhammadhikariFormPDF } from './OfficialDhammadhikariFormPDF';
 
 export function AdminRecordsModal({ isOpen, onClose, onConfigSaved }) {
   if (!isOpen) return null;
@@ -13,6 +14,7 @@ export function AdminRecordsModal({ isOpen, onClose, onConfigSaved }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [saveAlert, setSaveAlert] = useState(false);
+  const [viewingForm, setViewingForm] = useState(null);
 
   // Live Customizable Config State
   const [customConfig, setCustomConfig] = useState({
@@ -83,6 +85,43 @@ export function AdminRecordsModal({ isOpen, onClose, onConfigSaved }) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleViewOfficialDoc = (rec) => {
+    const formPayload = rec.fullData || {
+      regNo: rec.id,
+      fullName: rec.name,
+      fatherHusbandType: 'आदरणीय',
+      fatherHusbandName: rec.fatherName || 'धर्मनिष्ठ उपासक',
+      currentAddress: rec.address || `${rec.district}, ${rec.state}`,
+      pincode: '221007',
+      permanentAddress: rec.address || `${rec.district}, ${rec.state}`,
+      block: 'सदर ब्लॉक',
+      district: rec.district || 'वाराणसी',
+      state: rec.state || 'उत्तर प्रदेश',
+      mobile: rec.phone,
+      dob: '15/08/1990',
+      qualification: 'स्नातक (Graduate)',
+      occupation: 'नौकरी',
+      photoUrl: rec.photo || '',
+      familyDetails: [
+        { id: 1, name: '', age: '', education: '', maritalStatus: 'अविवाहित' },
+        { id: 2, name: '', age: '', education: '', maritalStatus: 'अविवाहित' },
+        { id: 3, name: '', age: '', education: '', maritalStatus: 'अविवाहित' },
+        { id: 4, name: '', age: '', education: '', maritalStatus: 'अविवाहित' },
+      ],
+      siblings: '2 भाई',
+      serviceYears: '2',
+      serviceMonths: '4',
+      serviceField: 'ग्राम धम्म प्रचार',
+      proposedRole: rec.details?.includes('पद:') ? rec.details.split('पद:')[1]?.split(',')[0]?.trim() : 'ग्राम धर्माधिकारी',
+      donationAmount: '1000',
+      dhammadhikariName: rec.name,
+      idNumber: '1234 5678 9012',
+      formDate: rec.date || new Date().toLocaleDateString('hi-IN'),
+      pledgeAccepted: true
+    };
+    setViewingForm(formPayload);
   };
 
   const handleToggleStatus = (id) => {
@@ -193,8 +232,21 @@ export function AdminRecordsModal({ isOpen, onClose, onConfigSaved }) {
         </div>
 
         <div className="modal-body">
-          {/* TAB 1: RECORDS CRM */}
-          {activeTab === 'records' ? (
+          {viewingForm ? (
+            <div>
+              <div style={{ marginBottom: '1rem' }} className="no-print">
+                <button onClick={() => setViewingForm(null)} className="btn btn-outline btn-sm">
+                  <ArrowLeft size={16} />
+                  <span>← वापस रिकॉर्ड्स सूची पर जाएँ</span>
+                </button>
+              </div>
+              <OfficialDhammadhikariFormPDF 
+                data={viewingForm} 
+                onEdit={() => setViewingForm(null)} 
+                onNew={() => setViewingForm(null)} 
+              />
+            </div>
+          ) : activeTab === 'records' ? (
             <>
               {/* Controls Bar */}
               <div style={{
@@ -317,13 +369,22 @@ export function AdminRecordsModal({ isOpen, onClose, onConfigSaved }) {
                             </button>
                           </td>
                           <td style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>
-                            <button 
-                              onClick={() => handleDeleteRecord(rec.id)}
-                              style={{ color: 'var(--color-error)', padding: '4px', cursor: 'pointer', background: 'transparent', border: 'none' }}
-                              title="हटाएँ"
-                            >
-                              <Trash2 size={16} />
-                            </button>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <button 
+                                onClick={() => handleViewOfficialDoc(rec)}
+                                style={{ color: 'var(--color-primary)', padding: '4px', cursor: 'pointer', background: 'transparent', border: 'none' }}
+                                title="अधिकृत 3-पेज फॉर्म / PDF देखें"
+                              >
+                                <Eye size={17} />
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteRecord(rec.id)}
+                                style={{ color: 'var(--color-error)', padding: '4px', cursor: 'pointer', background: 'transparent', border: 'none' }}
+                                title="हटाएँ"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))

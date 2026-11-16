@@ -30,11 +30,10 @@ export function ScrollToTop() {
     <button
       onClick={scrollToTop}
       className="scroll-to-top-btn animate-fade-in"
-      aria-label="Scroll to top"
+      aria-label="शीर्ष पर जाएं (Back to Top)"
       title="शीर्ष पर जाएं (Back to Top)"
     >
       <ArrowUp size={20} />
-      <span className="scroll-btn-text">ऊपर जाएं</span>
     </button>
   );
 }

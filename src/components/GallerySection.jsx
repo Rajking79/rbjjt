@@ -10,7 +10,7 @@ export function GallerySection() {
   const [photoCategory, setPhotoCategory] = useState('सभी (All)');
   const [lightboxItem, setLightboxItem] = useState(null);
 
-  const photoCategories = ['सभी (All)', 'संस्कार', 'दीक्षा', 'विहार', 'शिक्षा', 'स्वास्थ्य', 'सुरक्षा'];
+  const photoCategories = ['सभी (All)', 'सारनाथ', 'संस्कार', 'दीक्षा', 'विहार', 'शिक्षा', 'स्वास्थ्य', 'सुरक्षा'];
 
   const filteredPhotos = photoCategory === 'सभी (All)' 
     ? GALLERY_ITEMS 

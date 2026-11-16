@@ -75,8 +75,13 @@ export function Footer({ onOpenDonateModal, onOpenAdminModal }) {
               <li><a href="#about" onClick={(e) => scrollToSection(e, '#about')}>हमारे बारे में (About Us)</a></li>
               <li><a href="#founder" onClick={(e) => scrollToSection(e, '#founder')}>संस्थापक भिक्खु बुद्ध ज्योति</a></li>
               <li><a href="#pillars" onClick={(e) => scrollToSection(e, '#pillars')}>5 मुख्य आधार स्तंभ</a></li>
+              <li><a href="#sarnath" onClick={(e) => scrollToSection(e, '#sarnath')}>सारनाथ तीर्थ दर्शन (Sarnath)</a></li>
+              <li><a href="#vandana" onClick={(e) => scrollToSection(e, '#vandana')}>दैनिक बुद्ध वंदना व पंचशील</a></li>
               <li><a href="#roadmap" onClick={(e) => scrollToSection(e, '#roadmap')}>5-स्तरीय कार्य योजना</a></li>
+              <li><a href="#events" onClick={(e) => scrollToSection(e, '#events')}>वार्षिक धम्म कार्यक्रम</a></li>
               <li><a href="#dhammadhikari" onClick={(e) => scrollToSection(e, '#dhammadhikari')}>धर्माधिकारी पदाधिकारी</a></li>
+              <li><a href="#downloads" onClick={(e) => scrollToSection(e, '#downloads')}>डाउनलोड केंद्र (Downloads)</a></li>
+              <li><a href="#faqs" onClick={(e) => scrollToSection(e, '#faqs')}>अक्सर पूछे जाने वाले प्रश्न (FAQs)</a></li>
               <li><a href="#gallery" onClick={(e) => scrollToSection(e, '#gallery')}>चित्र दीर्घा (Gallery)</a></li>
             </ul>
           </div>
